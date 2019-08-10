@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<div class="container">
+ 
+   
+	<form>
+		<div class="row justify-content-md-center">
+		 <div class="col-md-3">
+	<div class="form-group">
+    <label for="exampleFormControlSelect1">Select DB</label>
+    <select class="form-control" id="db">
+      <option value="none">Select DB</option>
+      <option>spark_report</option>
+      <option>pdex_userprofile</option>
+      <option>PDEX_Discussions</option>
+    </select>
+  </div>
+</div>
+<div class="col-md-3">
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Select Collection</label>
+    <select class="form-control" id="Collection">
+    </select>
+  </div>
+</div>
+<div class="col-md-3">
+	<div class="form-group">
+    <div><label for="exampleFormControlSelect1"></label></div>
+
+<button id="getData" type="button" disabled class="btn btn-primary mb-2">Get Data</button>
+</div>
+</div>
+
+</div>
+</form>
+</div>
+<div>
+	<table class="small table table-bordered table-dark table-sm table-striped">
+  <thead id="thead"><tr></tr></thead>
+  <tbody id="tbody"><tr></tr></tbody>
+    
+
+</div>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" ></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+<script type="text/javascript">
+var ram = '${data}'
+console.log('base',ram)
+$(document).ready(function () {
+	// body...
+$('#db').change(function(){
+	var db = $(this).val()
+	console.log($(this).val())
+	if(db !== 'none' ){
+	dd(db)
+$('#getData').attr('disabled',false)
+
+	}else{
+$('#getData').attr('disabled',true)
+
+	}
+})
+$('#getData').click(function(){
+getDBData()
+
+	})
+	// $('#submit').click(function(){
+	// 	var db = $('#dbName').val()
+	// 	console.log(db)
+	// 	dd(db)
+	// })
+	
+})
+
+function dd(db){
+	$.ajax({
+  method: "POST",
+  url: '/',
+  data: {db:db},
+  dataType: 'json',
+  success: function(resultData) { 
+  	// alert("Save Complete") 
+  	console.log('resultData',resultData)
+  	$('#Collection').empty();
+resultData.map(function(v){
+
+	$('#Collection').append($('<option>', { 
+        value: v.name,
+        text : v.name 
+    }));
+
+})
+
+  }
+}).done(function( msg ) {
+    // alert( "Data Saved: " + msg );
+  	console.log('msg',msg)
+
+  });
+}
+
+
+function getDBData(){
+	var dName = $('#db').val()
+	var cName = $('#Collection').val()
+	console.log(dName+cName)
+	$.ajax({
+  method: "POST",
+  url: '/',
+  data: {dName:dName,cName:cName},
+  dataType: 'json',
+  success: function(resultData) { 
+console.log(resultData)
+let keys = []
+resultData.map(v =>{
+var key = Object.keys(v)
+
+keys = [...new Set(keys.concat(key))]
+	// keys = Object.assign(keys, key)
+	
+})
+console.log('aLLLLLL',keys)
+$('#thead tr').empty()
+$('#tbody').empty()
+keys.map(allKeys=>{
+	// console.log(v)
+
+	$('#thead tr').append("<th>"+allKeys+"</th>")
+
+
+
+})
+
+resultData.map((v,i)=>{
+$('#tbody').append('<tr></tr>')
+	keys.map(vkey=>{
+	$('#tbody tr:last').append('<td data-for='+vkey+' data-row='+i+'>'+undefined+'</td>')
+	for(var name in v) {
+if(vkey == name){ 
+var value = v[name];
+$('[data-for='+vkey+'][data-row='+i+']').text(value)
+
+}
+
+	}
+})
+// 		for(var name in v) {
+// 	keys.map(vkey=>{
+// 	$('#tbody tr:last').append('<td data-for='+vkey+' data-row='+i+'>'+i+'</td>')
+
+// 	if(vkey == name){ 
+// 	console.log('dddddddddwww',name)
+
+// 	var value = v[name];
+// 	// $('#tbody tr:last').append('<td>'+value+'</td>')
+
+// 	console.log('valuevalue',value)
+// }
+// })
+
+// }
+
+
+// 	let dd = keys[i]
+// console.log('ffffffff',v.key[i])
+// console.log('ssssssss',keys[i])
+// console.log('ddddddddd',i.[dd])
+})
+
+
+
+  }
+}).done(function( msg ) {
+    // alert( "Data Saved: " + msg );
+  	console.log('msg',msg)
+
+  });
+}
+
+
+// 	jqxhr.always(function() {
+//   alert( "second complete" );
+// });
+// }
+// $(window).load(function(){
+// 	// var ram = ${data}
+// 	// console.log(ram)
+// })
+
+
+</script>
+</html>

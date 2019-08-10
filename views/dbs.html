@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css"> -->
+</head>
+<body>
+
+<div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar" class="">
+            <div class="sidebar-header">
+                <h3>Ashish Kumar Shakya</h3>
+            </div>
+
+            <ul class="list-unstyled components" id="dbMenu">
+                <p>DBS List</p>
+                <li class="active">
+                    <a href="#Dev" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Dev</a>
+                    <ul class="collapse list-unstyled" id="Dev">
+                        
+                    </ul>
+                </li>
+               <li>
+                    <a href="#Stage" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Stage</a>
+                    <ul class="collapse list-unstyled" id="Stage">
+                        
+                    </ul>
+                </li>
+                <li>
+                    <a href="#Local" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Local</a>
+                    <ul class="collapse list-unstyled" id="Local">
+                        
+                    </ul>
+                </li>
+                <li>
+                    <a href="#Prod" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Prod</a>
+                    <ul class="collapse list-unstyled" id="Prod">
+                        
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li>
+                    <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+                </li>
+                <li>
+                    <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="navbar-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <svg class="svg-inline--fa fa-align-justify fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="align-justify" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M0 84V44c0-8.837 7.163-16 16-16h416c8.837 0 16 7.163 16 16v40c0 8.837-7.163 16-16 16H16c-8.837 0-16-7.163-16-16zm16 144h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 256h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0-128h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"></path></svg><!-- <i class="fas fa-align-justify"></i> -->
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+                               <div class="form-group">
+    <label for="exampleFormControlSelect1">Select DB</label>
+    <select class="form-control" id="db">
+      <option value="none">Select DBccccccc</option>
+    </select>
+  </div>
+                            </li>
+                            <li class="nav-item">
+                                <div class="form-group">
+    <label for="exampleFormControlSelect1">Select Collection</label>
+    <select class="form-control" id="Collection">
+    </select>
+  </div>
+                            </li>
+                            <li class="nav-item">
+                                <div class="form-group">
+    <div><label for="exampleFormControlSelect1"></label></div>
+
+<button id="getData" type="button" disabled class="btn btn-primary mb-2">Get Data</button>
+</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            
+            
+
+<div>
+  <table class="small table table-bordered table-dark table-sm table-striped">
+  <thead id="thead"><tr></tr></thead>
+  <tbody id="tbody"><tr></tr></tbody>
+    </table>
+
+</div>
+
+
+            
+        </div>
+    </div>
+<div id="model">
+  <div class="modelBox">
+    <button id="addDB">Add DB</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+	<div class="container">
+ 
+   
+	<form>
+		<div class="row justify-content-md-center">
+		 <div class="col-md-3">
+	<div class="form-group">
+    <label for="exampleFormControlSelect1">Select DB</label>
+    <select class="form-control" id="db">
+      <option value="none">Select DBccccccc</option>
+      <option>spark_report</option>
+      <option>pdex_userprofile</option>
+      <option>PDEX_Discussions</option>
+    </select>
+  </div>
+</div>
+<div class="col-md-3">
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Select Collection</label>
+    <select class="form-control" id="Collection">
+    </select>
+  </div>
+</div>
+<div class="col-md-3">
+	<div class="form-group">
+    <div><label for="exampleFormControlSelect1"></label></div>
+
+<button id="getData" type="button" disabled class="btn btn-primary mb-2">Get Data</button>
+</div>
+</div>
+
+</div>
+</form>
+</div>
+<div>
+	<table class="small table table-bordered table-dark table-sm table-striped">
+  <thead id="thead"><tr></tr></thead>
+  <tbody id="tbody"><tr></tr></tbody>
+    
+
+</div> -->
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" ></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script> -->
+<!-- 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script> -->
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script> -->
+
+</body>
+<script type="text/javascript">
+  var baseData = '${baseData}'
+  baseData = JSON.parse(baseData)
+$(document).ready(function () {
+  activeDB(baseData)
+  addDB(baseData)
+
+$('#db').change(function(){
+	var db = $(this).val()
+	console.log($(this).val())
+	if(db !== 'none' ){
+	dd(db)
+$('#getData').attr('disabled',false)
+
+	}else{
+$('#getData').attr('disabled',true)
+
+	}
+})
+$('#getData').click(function(){
+getDBData()
+
+	})
+ $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+        $(this).toggleClass('active');
+    });
+})
+function activeDB(data,type){
+  var btnS1 = 'Edit', btnS2 = 'Connect', btnS3 = 'Delete', addClass = '', class1 = ''; 
+  if(type == 'add'){
+    addClass = 'addingDB'
+  }
+
+  $('#model .modelBox .__table').remove()
+  $('#model .modelBox').append('<table class="__table '+addClass+'"><tr><th>Name</th><th>URI</th><th>Collection</th><th>Tag</th><th>Public</th><th>Status</th><th>Action</th></tr></table>')
+  data.map(function(v){
+if(v.name == '' && v.uri === ''){
+btnS1 = 'Test'
+btnS2 = 'Add'
+btnS3 = 'Cancel'
+class1 = 'activeEdit'
+}
+
+$('#model .modelBox .__table').append('<tr class='+class1+'><td placeholder="Name*">'+v.name+'</td><td placeholder="URI*">'+v.uri+'</td><td placeholder="Collection*">'+v.collection+'</td><td placeholder="Tag">'+v.for+'</td><td><input type="checkbox" checked='+v.public+' disabled></td><td>N/A</td><td><button class="editDB">'+btnS1+'</button><button class="btn'+btnS2+'" >'+btnS2+'</button><button>'+btnS3+'</button></td></tr>')
+  })
+  $('#model .modelBox .__table tr:not(.activeEdit) td').append(
+      $('<div>').addClass('mask')
+    )
+
+if(type == 'add'){
+// setTimeout(function(){ 
+  $('#model .modelBox .__table').addClass('activeEditTable')
+  $('#model .modelBox .__table.activeEditTable .activeEdit td:nth-child(-n+4)').attr('contenteditable', true)
+
+  // },1000)
+}
+  dbConnect()
+dbEdit()
+dbAdd()
+}
+function dbMenu(dbsList){
+  dbsList.map(function(v){
+  $('#dbMenu #'+v.for).append('<li><a>'+v.name+'</a></li>')
+  $('#db').append($('<option>', { 
+        value: v.name,
+        text : v.name 
+    }));
+
+
+  })
+}
+function dbConnect(){
+  $('.btnConnect').click(function(){
+    console.log('This is for db connection')
+  })
+}
+function dbAdd(){
+  $('.btnAdd').click(function(){
+   var name = $(this).parents('tr').find('td[placeholder = "Name*"]').text();
+   var uri = $(this).parents('tr').find('td[placeholder = "URI*"]').text();
+   var collection = $(this).parents('tr').find('td[placeholder = "Collection*"]').text();
+   var tag = $(this).parents('tr').find('td[placeholder = "Tag*"]').text();
+if (name.trim() == '' || uri.trim() == '' || collection.trim() == ''){
+ alert('Value CAnt be blank')
+}else{
+
+var data = {name,uri,collection,tag}
+
+ var values = {for:'dbConnect',values:data} 
+
+ 
+console.log(dbHTTP('post','/dbs',values))
+
+
+
+}
+
+
+  })
+}
+function dbEdit(){
+  $('.editDB').click(function(){
+    var th = $(this)
+
+$(this).parents('table').find('tr').removeClass('activeEdit')
+$(this).parents('table').addClass('activeEditTable')
+$('.activeEditTable .mask').remove()
+th.parents('tr').addClass('activeEdit')
+$('.activeEditTable tr:not(.activeEdit) td').append('<div class="mask"></div>')
+
+// $('.activeEditTable tr:not(.activeEdit) td').append('<div class="mask"></div>')
+setTimeout(function(){ 
+$('.activeEditTable').addClass('anim')
+th.text('Update').addClass('dbUpdate')
+th.next('button').text('Cancel').addClass('dbUpdateCancel')
+$('.activeEditTable .activeEdit td:nth-child(-n+4)').attr('contenteditable', true)
+dbUpdateCancel()
+
+}, 100);
+
+  })
+}
+
+function dbUpdateCancel(){
+  $('.dbUpdateCancel').click(function(){
+    $(this).parents('table').find('tr').removeClass('activeEdit')
+$(this).parents('table').removeClass('activeEditTable')
+$(this).text('Connect').removeClass('dbUpdateCancel')
+$(this).prev('button').text('Edit').removeClass('dbUpdate').addClass('editDB')
+  })
+
+}
+var tt = 'add';
+function addDB(baseData){
+  
+  $('#addDB').click(function(){
+    var myElement = {
+  collection: "",
+createdUser: "Ashish",
+for: "",
+name: "",
+public: true,
+uri: ""
+}
+console.log('baseData',baseData)
+baseData.push(myElement)
+
+if (tt == 'add'){
+ activeDB(baseData,'add')
+tt = ''
+}else{
+  activeDB(baseData)
+tt = 'add'
+}
+
+
+  })
+}
+function dbHTTP(type,url,data){
+$.ajax({
+  method: type,
+  url: url,
+  data: data,
+  dataType: 'json',
+  success: function(data) { 
+    return data
+
+  },
+  error: function(xhr) { 
+    var message = {
+      status : xhr.status
+    }
+
+    return message
+
+
+  }
+})
+}
+
+function dd(db){
+	$.ajax({
+  method: "POST",
+  url: '/dbs',
+  data: {db:db},
+  dataType: 'json',
+  success: function(resultData) { 
+  	// alert("Save Complete") 
+  	console.log('resultData',resultData)
+  	$('#Collection').empty();
+resultData.map(function(v){
+
+	$('#Collection').append($('<option>', { 
+        value: v.name,
+        text : v.name 
+    }));
+
+})
+
+  }
+}).done(function( msg ) {
+    // alert( "Data Saved: " + msg );
+  	console.log('msg',msg)
+
+  });
+}
+
+
+function getDBData(){
+	var dName = $('#db').val()
+	var cName = $('#Collection').val()
+	console.log(dName+cName)
+	$.ajax({
+  method: "POST",
+  url: '/dbs',
+  data: {dName:dName,cName:cName},
+  dataType: 'json',
+  success: function(resultData) { 
+console.log(resultData)
+let keys = []
+resultData.map(v =>{
+var key = Object.keys(v)
+
+keys = [...new Set(keys.concat(key))]
+	// keys = Object.assign(keys, key)
+	
+})
+console.log('aLLLLLL',keys)
+$('#thead tr').empty()
+$('#tbody').empty()
+keys.map(allKeys=>{
+	// console.log(v)
+
+	$('#thead tr').append("<th>"+allKeys+"</th>")
+
+
+
+})
+
+resultData.map((v,i)=>{
+$('#tbody').append('<tr></tr>')
+	keys.map(vkey=>{
+	$('#tbody tr:last').append('<td data-for='+vkey+' data-row='+i+'>'+undefined+'</td>')
+	for(var name in v) {
+if(vkey == name){ 
+var value = v[name];
+$('[data-for='+vkey+'][data-row='+i+']').text(value)
+
+}
+
+	}
+})
+})
+
+
+
+  }
+}).done(function( msg ) {
+    // alert( "Data Saved: " + msg );
+  	console.log('msg',msg)
+
+  });
+}
+
+
+</script>
+</html>

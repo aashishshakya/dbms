@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Database Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="coverBg"></div>
+  <div class="header">
+    <div class="selectBox">
+      <ul class="nav">
+        <li class="__ib">
+          <label for="exampleFormControlSelect1">Select DB</label>
+          <select class="form-control" id="db">
+            <option value="none">Select DB</option>
+          </select>
+
+        </li><li class="__ib">
+          <label for="exampleFormControlSelect1">Select Collection</label>
+          <select class="form-control" id="Collection">
+          </select>
+        </li><li class="__ib">
+          <label for="exampleFormControlSelect1">Number of Data</label>
+          <select class="form-control" id="nod">
+            <option>20</option>
+            <option>50</option>
+            <option>100</option>
+            <option>200</option>
+          </select>
+        </li>
+        <li class="__ib">
+          <label for="">Sort By</label>
+          <ul class="sortBy">
+
+          </ul>
+        </li>
+        <li class="__ib">
+          <button id="getData" type="button" disabled class="btn btn-primary mb-2">Get Data</button>
+        </li>
+        <li class="__ib">
+          <label for="">Total Records</label>
+          <div class="tRecords">
+            0
+          </div>
+        </li>
+        <li class="__ib __va-m">
+          <div class="clearFilter">&#9881;</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="openModal">&#9929;</div>
+    <div class="views"><div class="jsonView __ib">{ }</div><div class="arrayView __ib">[ ]</div><div class="tableView __ib">&#9782;</div></div>
+  </div>
+  <div id="content">
+
+    <div class="dataJson"><pre><code></code></pre></div>
+
+    <div id="asd"></div>
+  </div>
+  
+  <div id="model">
+    <div class="modelBox">
+      <div class="modelHeader">
+        <div id="addDB">&#9960;</div>
+        <div class="closeModel">&#9876;</div>
+      </div>
+    </div>
+  </div>
+  <div id="findModel" class="__shadow">
+    <h3>Find</h3>
+    <div class="findBox">
+      <div class=" findType">
+        <div class="__ib"><input type="radio" name="findType" id="String" value="String" checked><label for="String">String</label></div><div class="__ib"><input type="radio" name="findType" id="ID" value="ID"><label for="ID">ID</label></div><div class="__ib"><input type="radio" name="findType" id="Number" value="Number"><label for="Number">Number</label></div>
+      </div>
+      <input type="text" name="findValue" class="__shadow" id="findValue" placeholder="Type Value here">
+
+      <div align="right" class="iconBox __mt_a"><span id="findSearch" class="__ib icon">&#10004;</span><span id="findCancel" class="__ib icon">&#10008;</span></div>
+    </div>
+  </div>
+  <div id="modelBg"></div>
+
+    <div class="footer hide"><div class="loader __ib __va-m"></div><div class="__ib __va-m msg">Connecting Server.........</div></div>
+
+
+
+
+
+
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" ></script> -->
+    <script src="js/jquery-3.3.1.min.js" ></script>
+    <script src="js/okmplm.js" ></script>
+  </body>
+  <script type="text/javascript">
+
+    var baseData = '${baseData}'
+    var dbloadData
+    baseData = JSON.parse(baseData)
+    $(document).ready(function () {
+  // activeDB(baseData)
+  // addDB(baseData)
+  // console.log('baseData',baseData)
+  dbMenu(baseData)
+
+
+  
+  $('#sidebarCollapse').on('click', function () {
+    $('#sidebar').toggleClass('active');
+    $(this).toggleClass('active');
+  });
+})
+
+    function dbMenu(dbsList){
+      dbsList.map(function(v){
+        $('#db').append($('<option>', { 
+          value: v.id,
+          text : v.name 
+        }));
+
+
+      })
+    }
+
+
+
+
+
+    var tt = 'add';
+
+    function dbHTTP(type,url,data,callback){
+      $.ajax({
+        method: type,
+        url: url,
+        data: data,
+        contentType:"application/json; charset=utf-8",
+        dataType: 'json',
+        success: callback,
+        error: function(xhr) { 
+          var message = {
+            status : xhr.status
+          }
+
+          return message
+
+
+        }
+      })
+    }
+
+    function dd(db){
+     $.ajax({
+      method: "POST",
+      url: '/',
+      data: {db:db},
+      dataType: 'json',
+      success: function(resultData) { 
+  	// alert("Save Complete") 
+  	// console.log('resultData',resultData)
+  	$('#Collection').empty();
+    resultData.map(function(v){
+
+     $('#Collection').append($('<option>', { 
+      value: v.name,
+      text : v.name 
+    }));
+
+   })
+
+  }
+}).done(function( msg ) {
+    // alert( "Data Saved: " + msg );
+    // console.log('msg',msg)
+
+  });
+}
+
+
+function json2html(json) {
+  var i, ret = document.createElement('ul'), li;
+  for( i in json) {
+    li = ret.appendChild(document.createElement('li'));
+    li.appendChild(document.createTextNode(i+": "));
+    if( typeof json[i] === "object"){
+      li.appendChild(json2html(json[i]));
+    } 
+    else {
+
+      li.firstChild.nodeValue += json[i];
+    }
+  }
+  return ret;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getDBData2(){
+  var dName = $('#db').val()
+  var cName = $('#Collection').val()
+  var limit = parseInt($('#nod').val())
+  var data = {dName:dName,cName:cName,limit}
+  var values = {  "for": "dbDocumentConnect", values : data}
+  dbHTTP('post','/',JSON.stringify(values),function(resultData){
+          // console.log('data',data)
+          // location.reload();
+
+
+
+
+          dbloadData = resultData
+
+
+          $('#asd').html(json2Table(resultData))
+          return false
+          $('.dataJson').slideUp();
+          $('.dataTable').slideDown();
+
+          let keys = []
+          resultData.map(v =>{
+            var key = Object.keys(v)
+
+            keys = [...new Set(keys.concat(key))]
+  // keys = Object.assign(keys, key)
+  
+})
+          // console.log('aLLLLLL',keys)
+          $('#thead tr').empty()
+          $('#tbody').empty()
+          keys.map(allKeys=>{
+  // console.log(v)
+
+  $('#thead tr').append("<th>"+allKeys+"</th>")
+
+
+
+})
+
+          resultData.map((v,i)=>{
+            $('#tbody').append('<tr></tr>')
+            keys.map(vkey=>{
+             $('#tbody tr:last').append('<td data-for='+vkey+' data-row='+i+'>'+undefined+'</td>')
+             for(var name in v) {
+              if(vkey == name){ 
+                var value = v[name];
+                $('[data-for='+vkey+'][data-row='+i+']').text(value)
+
+              }
+
+            }
+          })
+          })
+
+
+
+
+        })
+
+}
+
+
+
+
+
+
+</script>
+</html>
