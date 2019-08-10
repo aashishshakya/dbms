@@ -1,0 +1,33 @@
+.env.local
+
+cypress/videos
+cypress/screenshots
+cypress/fixtures/internal.txt
+cypress/results
+
+nginx/default.conf
+
+# Dependency directory
+# https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
+node_modules/
+bower_components/
+npm_tmp/
+dist/
+package-lock.json
+dbms.iml
+
+
+# other
+.tmp
+.idea
+.DS_Store
+/build
+/report
+/coverage
+npm-debug.log
+.material-cache
+*.swp
+yarn-error.log
+dronesecret.sh
+.vscode/
+apollo.config.js
