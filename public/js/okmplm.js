@@ -6,9 +6,44 @@
 // __ad dbEdit f
 // __ae dbAdd f
 
-var sortDBType = {'_id':-1}, 
+var sortDBType = {'_id':-1},
 findByDB = {}
-var dummy2 = ["aute","ipsum","proident","amet","sunt","sint","ullamco"];
+var dummy2 = ["aute","ipsum","proident","amet","sunt","sint","ullamco"],
+    dummy3 =[{
+        "tags": [
+            "consectetur",
+            "exercitation",
+            "do",
+            "non",
+            "reprehenderit",
+            "ut",
+            "sit"
+        ],
+        "friends": [
+            {
+                "id": 33333,
+                "name": "Lesley Gentry"
+            },
+            {
+                "id": 1,
+                "name": "Mcbride Welch"
+            }
+        ],
+	},
+        {
+            "tags": [
+                "reprehenderit",
+                "ut",
+                "sit"
+            ],
+            "friends": [
+                {
+                    "id": 0,
+                    "name": "Lesley Gentry"
+                }
+            ],
+        }
+    ];
 
 var dummy = [
 {
@@ -287,7 +322,7 @@ var dummy = [
 function __aa(data,type){
 					// console.log('dddddddddddddddddddd',data)
 
-					var btnS1 = 'Edit', btnS2 = 'Connect', btnS3 = 'Delete', addClass = '', class1 = '',class3 = ''; 
+					var btnS1 = 'Edit', btnS2 = 'Connect', btnS3 = 'Delete', addClass = '', class1 = '',class3 = '';
 					if(type == 'add'){
 						addClass = 'addingDB'
 					}
@@ -310,7 +345,7 @@ function __aa(data,type){
 						)
 
 					if(type == 'add'){
-// setTimeout(function(){ 
+// setTimeout(function(){
 	$('#model .modelBox .__table').addClass('activeEditTable')
 	$('#model .modelBox .__table.activeEditTable .activeEdit td:nth-child(-n+4)').attr('contenteditable', true)
 
@@ -369,7 +404,7 @@ function __ad(){
 		$('.activeEditTable tr:not(.activeEdit) td').append('<div class="mask"></div>')
 
 // $('.activeEditTable tr:not(.activeEdit) td').append('<div class="mask"></div>')
-setTimeout(function(){ 
+setTimeout(function(){
 	$('.activeEditTable').addClass('anim')
 	th.text('Update').removeClass('editDB').addClass('btnUpdate')
 	th.next('button').text('Cancel').addClass('btnCancel')
@@ -398,7 +433,7 @@ function __ae(){
 			var data = {name,uri,collection,for:tag,public,createdUser,id}
 			var values ;
 			if(className == 'btnUpdate'){
-				values = {	"for": "dbUpdate", 	values : data }				
+				values = {	"for": "dbUpdate", 	values : data }
 			}
 
 			if(className == 'btnAdd'){
@@ -416,7 +451,7 @@ function __ae(){
 					// location.reload();
 				})
 			}
-			
+
 		}
 
 
@@ -468,7 +503,7 @@ function getCollection(){
 		if(id !== 'none' ){
 			loading('show','Connection Loading...')
 			$('#Collection').empty();
-			$('#Collection').append($('<option>', { 
+			$('#Collection').append($('<option>', {
 				value: 'Loading...',
 				text : 'Loading...'
 			}));
@@ -494,13 +529,13 @@ function getCollection(){
 			$('#Collection').empty();
 			resultData.map(function(v){
 
-				$('#Collection').append($('<option>', { 
+				$('#Collection').append($('<option>', {
 					value: v.name,
-					text : v.name 
+					text : v.name
 				}));
 
 			})
-			
+
 			$('#getData').attr('disabled',false)
 
 		})
@@ -621,7 +656,7 @@ function json2Table(json) {
 
 			keys = [...new Set(keys.concat(key))]
   // keys = Object.assign(keys, key)
-  
+
 })
 		var table = $('<table class="__table rowDataTable" data-table="'+ttable+'"><tr></tr></table>');
 		keys.map(allKeys=>{
@@ -667,7 +702,7 @@ if(sortDBType[allKeys] == -1){
 			for(var name in v) {
 				var value = v[name];
 
-				if(vkey == name){ 
+				if(vkey == name){
         	// console.log('111111111111111111111111',value)
         	// console.log('dddddddddddddddddddddddd',vkey)
         	// console.log('2222222222222222222222222',typeof value)
@@ -748,7 +783,7 @@ function findData(){
 
 	$('#findSearch').click(function(){
 		var key = $('#findModel .bKey').text()
-		console.log('key',key)	
+		console.log('key',key)
 		var findType = $("input:radio[name=findType]:checked").val()
 		var findValue = $('#findValue').val()
 		findByDB = {}
@@ -787,19 +822,19 @@ function clearFilter(){
 			getDBData()
 
 		}
-		
+
 	})
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 function jsonHTMLView(){
 	$('.jsonView').click(function(){
 		$('#asd').empty()
-		$('#asd').html('<pre>'+JSON.stringify(dummy2, undefined, 2)+'</pre>')
+		$('#asd').html('<pre>'+JSON.stringify(dbloadData, undefined, 2)+'</pre>')
     // $('#asd').html('<pre>'+JSON.stringify(dbloadData,  null, '\t')+'</pre>')
 })
 	$('.arrayView').click(function(){
 		$('#asd').empty()
-		$('#asd').html(jsonDView(dummy2))
+		$('#asd').html(json2DView(dbloadData))
 		// $('#asd').html(jsonDView(dbloadData))
     // $('#asd').html('<pre>'+JSON.stringify(dbloadData,  null, '\t')+'</pre>')
 })
@@ -811,98 +846,35 @@ function jsonHTMLView(){
 
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-let ulCount = 0;
+    function json2DView(json) {
+        if(Array.isArray(json)){
+            var html = $('<ul class="__arrayUl"></ul>'), li;
+            $.each(json, function(key,value){
+                li = html.append('<li><span class="value __ib __va-t"></span></li>')
+                if( typeof value === "object"){
+                    li.children().last().find('.value').append(json2DView(value));
+                }
+                else {
+                    li.children().last().find('.value').text(value);
+                }
 
-function jsonDView(json) {
+            })
+            return html
+        }
+        var html = $('<ul class="__objectUl"></ul>'), li;
+        // for( i in json) {
+        $.each(json, function(key,value){
+            li = html.append('<li><span class="key __ib __va-t">'+key+'</span> <span class="colun __ib __va-t">:</span> <span class="value __ib __va-t"></span></li>')
+            if( typeof value === "object"){
+                li.children().last().find('.value').append(json2DView(value));
+            }
+            else {
+                li.children().last().find('.value').text(value);
+            }
 
-	let table = $('<div class="jsonArrayBox'+ulCount+'"></div>')
-
-
-if(Array.isArray(json)){
-	json.map(function(v,i){
-
-ulCount = i
-		table.append('<ul class="array'+ulCount+'"></ul>')
-
-		var keys = Object.keys(v);
-
-
-		keys.map((key,index)=>{
-
-			console.log('keys',keys)
-			console.log('iiii',i)
-			console.log('ulCount',ulCount)
-			console.log('vvvvv',v)
-			console.log('keyyy',key)
-
-			var value = v[key];
-
-			if(Array.isArray(value)){
-
-				table.find('ul.array'+ulCount+'').append('<li data-for="'+key+'" data-ul="'+ulCount+'"><span class="key">'+key+'</span> <span class="colon">:</span> <span class="childJson'+ulCount+'"></span></li>')
-				// table.find('li[data-for='+key+'] .childJson'+ulCount).html('<pre>'+JSON.stringify(value)+'<pre>')
-
-				// table.find('li[data-for='+key+'][data-ul='+ulCount+'] .childJson'+ulCount).html(jsonDView([value]))
-
-	 // table.find('ul.array'+i+'').append('')
-
-	}else if(typeof value === "object" && value !== null){
-// console.log('gigigi',value)
-// table.find('ul.array'+i+'').append('<li><span class="key">'+key+'</span> <span class="colon">:</span> <span>ObjectObjectObjectObject</span></li>')
-table.find('ul.array'+ulCount+'').append('<li data-for="'+key+'"><span class="key">'+key+'</span> <span class="colon">:</span> <span class="childJson'+ulCount+'"></span></li>')
-				table.find('li[data-for='+key+'] .childJson'+ulCount).html('iiiiiiiii')
-				// table.find('li[data-for='+key+'] .childJson'+ulCount).html(jsonDView(value))
-
-}else{
-	// console.log('ulCountulCount',ulCount)
-	// console.log('valuevaluevalue',value)
-	table.find('ul.array'+ulCount+'').append('<li data-for="'+key+'" data-ul="'+ulCount+'"><span class="key">'+key+'</span> <span class="colon">:</span> <span>'+value+'</span></li>')
-
-
-}
-})
-
-
-	})
-}else{
-
-
-		table.append('<ul class="ulCount'+ulCount+'"></ul>')
-
-
-var keys = Object.keys(json);
-console.log('keyssssssssssssssssssssssssssssssssssssssssss',keys)
-
-		keys.map((key,index)=>{
-
-			var value = json[key];
-
-			if(Array.isArray(value)){
-
-				table.find('ul.ulCount'+ulCount+'').append('<li><span class="key">'+key+'</span> <span class="colon">:</span> <span class="childJson'+ulCount+'"></span></li>')
-				table.find('.childJson'+ulCount).html(jsonDView(value))
-
-	 // table.find('ul.array'+i+'').append('')
-
-	}else if(typeof value === "object" && value !== null){
-// console.log('gigigi',value)
-table.find('ul.ulCount'+ulCount+'').append('<li><span class="key">'+key+'</span> <span class="colon">:</span> <span class="childJson'+ulCount+'"></span></li>')
-				table.find('.childJson'+ulCount).html(jsonDView(value))
-
-}else{
-	table.find('ul.ulCount'+ulCount+'').append('<li><span class="key">'+key+'</span> <span class="colon">:</span> <span>'+value+'</span></li>')
-
-
-}
-})
-
-
-
-}
-// ulCount += 1;
-	return table
-
-}
+        })
+        return html;
+    }
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////

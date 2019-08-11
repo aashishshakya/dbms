@@ -175,7 +175,7 @@
 }
 
 
-function json2html(json) {
+function json2html2(json) {
   var i, ret = document.createElement('ul'), li;
   for( i in json) {
     li = ret.appendChild(document.createElement('li'));
@@ -190,6 +190,27 @@ function json2html(json) {
   }
   return ret;
 }
+
+    function old_json2html(json) {
+        var i, ret = $('<ul></ul>'), li;
+        for( i in json) {
+            li = ret.append('<li>'+i+': <span class="value"></span></li>')
+            // li.appendChild(document.createTextNode(i+": "));
+            if( typeof json[i] === "object"){
+                console.log('ddd',i,li.children().last().html())
+
+                li.append(json2html(json[i]));
+            }
+            else {
+                li.children().last().find('.value').text(json[i]);
+// li.text(json[i])
+                // li.firstChild.nodeValue += json[i];
+            }
+        }
+        return ret;
+    }
+
+
 
 
 
