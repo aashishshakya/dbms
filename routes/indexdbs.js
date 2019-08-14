@@ -381,10 +381,10 @@ if(reqFor == 'dbConnect'){
 // 			res.send(sampleJson)
 
 // return false
-	dbBackup(values, res)
+// 	dbBackup(values, res)
 
 
-	// dbDocumentConnect2 (values,  res)
+	dbDocumentConnect2 (values,  res)
 
 	}
 	if(reqFor == 'getCollection'){
