@@ -82,7 +82,6 @@ function __ab(baseData){
 ////////////////////////////////////////////////////////////////////////////////////////
 function __ac(){
 	$('.btnConnect').click(function(){
-		// console.log('This is for db connection')
 	})
 }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +137,6 @@ function __ae(){
 			}
 			if(values){
 				dbHTTP('post','/',JSON.stringify(values),function(data){
-					// console.log('data',JSON.parse(data.data))
 
 					__aa(JSON.parse(data.data))
 					// location.reload();
@@ -204,7 +202,6 @@ function getCollection(){
 		findByDB = {}
 		$('.clearFilter').removeClass('enable')
 
-		// console.log('findByDBfindByDB',findByDB)
 	})
 
 	function collection(id){
@@ -277,7 +274,6 @@ function loading(type,msg){
 ////////////////////////////////////////////////////////////////////////////////////////
 
 function getDBData(){
-	// console.log('1111')
 	var dName = $('#db').val()
 	var cName = $('#Collection').val()
 	var limit = parseInt($('#nod').val())
@@ -311,7 +307,6 @@ function sortDoc(){
 			getDBData()
 
 		}else if($(this).hasClass('asc')){
-// console.log('sasd')
 $(this).removeClass('asc')
 $(this).addClass('desc').text('de')
 var sortKey = $(this).parents('th').find('h4').text()
@@ -327,8 +322,6 @@ getDBData()
 	var sortKey = $(this).parents('th').find('h4').text()
 	var sortValue = -1
 	sortDBType = {[sortKey]:sortValue}
-// console.log('ddd',$(this).parents('th').find('h4').text())
-		// console.log('aaa',sortDBType)
 		loading('show','Data Loading... ')
 
 		getDBData()
@@ -347,7 +340,6 @@ getDBData()
 let ttable = 0;
 
 function json2Table(json) {
-// console.log('jsonjsonjson',json)
 	ttable += 1
 
 
@@ -363,15 +355,12 @@ function json2Table(json) {
 })
 		var table = $('<table class="__table rowDataTable" data-table="'+ttable+'"><tr></tr></table>');
 		keys.map(allKeys=>{
-  // console.log(v)
   var class1 = '';
   var class2 = '';
 
   Object.keys(sortDBType).forEach(function(key) {
-// console.log('key',key)
 
 if(key == allKeys){
-// console.log('allKeys',allKeys)
 if(sortDBType[allKeys] == -1){
 	class1 = 'desc'
 	class2 = 'activeTh'
@@ -406,16 +395,12 @@ if(sortDBType[allKeys] == -1){
 				var value = v[name];
 
 				if(vkey == name){
-        	// console.log('111111111111111111111111',value)
-        	// console.log('dddddddddddddddddddddddd',vkey)
-        	// console.log('2222222222222222222222222',typeof value)
         	if(value !== null && typeof value == 'object' && value.length !== undefined  && typeof value[0] == 'object'){
 
         		$(table).find('[data-for="'+vkey+'"][data-row="'+i+'"]').html(json2Table(value))
 // $(table).find('[data-for='+vkey+'][data-row='+i+']').text('value')
 
 }else if (value !== null && value.length === undefined && typeof value == 'object') {
-  // console.log('string',value)
   $(table).find('[data-for="'+vkey+'"][data-row="'+i+'"]').html(json2Table([value]))
 
 
@@ -443,29 +428,22 @@ if(sortDBType[allKeys] == -1){
 
 ////////////////////////////////////////////////////////////////////////////////////////
 function addSortBy(){
-	// console.log('Object.keys(sortDBType)',Object.keys(sortDBType)[0])
 	$('.sortBy').empty()
 	$('.sortBy').append('<li><div class="__ib">'+Object.keys(sortDBType)[0]+'</div><div class="__ib">'+sortDBType[Object.keys(sortDBType)[0]]+'</div></li>')
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 
 function findBy(){
-	// console.log('hi')
 	$('.find').click(function(){
-		// console.log('222222222222')
 
 		$('#findModel,#modelBg').fadeIn()
 		$('#findValue').val('')
 		var key = $(this).parents('th').find('h4').text()
 		var paretskeyLength = $(this).parents('table').length
-		// console.log('keykeykey',key)
 		var  paretskey = [] ;
 		for (var i = 0; i < paretskeyLength-1; i++) {
 			paretskey.push($(this).parents('table').parent('td').eq(i).attr('data-for'))
 		}
-		// console.log('dddddddddddddddparetskey2',paretskey2.join('.')+'.'+key)
-		// console.log('keykeykey2',$(this).parents('table').parent('td').parents('table').parent('td').attr('data-for'))
-		// console.log('paretskeyLength',paretskeyLength)
 		// var paretskey = $(this).parents('table').parent('td').attr('data-for')
 
 		if(paretskeyLength > 1){
@@ -473,7 +451,6 @@ function findBy(){
 			key = paretskey.join('.')+'.'+key
 		}
 
-		// console.log('kkkkkk',key)
 		$('#findModel h3').html('Find in <b class="bKey">'+key+'</b> Column')
 
 	})
@@ -486,22 +463,18 @@ function findData(){
 
 	$('#findSearch').click(function(){
 		var key = $('#findModel .bKey').text()
-		// console.log('key',key)
 		var findType = $("input:radio[name=findType]:checked").val()
 		var findValue = $('#findValue').val()
 		findByDB = {}
 		if (findValue != null && findValue != '') {
 			findByDB = {key,findType,value:findValue}
 			$('.clearFilter').addClass('enable')
-  	// console.log('suces',findByDB)
   	loading('show','Data Loading... ')
   	getDBData()
 // return false
 
 }else{
-  	// console.log('canc',person)
   }
-  // console.log('findByDB',findByDB)
 
 })
 
@@ -516,7 +489,6 @@ function findData(){
 ////////////////////////////////////////////////////////////////////////////////////////
 function clearFilter(){
 	$('.clearFilter').click(function(){
-		// console.log('ddddd',$(this).hasClass('enable'))
 		if($(this).hasClass('enable')){
 			$(this).removeClass('enable')
 			findByDB = {}
@@ -606,7 +578,6 @@ function jsonHTMLView(w){
      await dbHTTP('post','/',JSON.stringify(values),function(resultData){
        loader($('#headerContent .tab[data-tab='+_window+']'),'hide')
        if(resultData.Error === undefined){
-  // console.log('resultData.Errord',resultData.Error)
          var dropDownDataIndex = dropDownData.findIndex((obj => obj.id == id));
          var tabArrayIndex = tabArray.findIndex((obj => obj.windowId == _window));
          dropDownData[dropDownDataIndex].collections = resultData
@@ -647,7 +618,6 @@ function jsonHTMLView(w){
       }
       loader($('#headerContent .tab[data-tab='+_window+']'),'hide')
 
-// console.log('resultData',resultData)
       dbloadData = resultData.data
       selector.find('.dataInfo').remove()
       selector.removeClass('gradientBG')
@@ -677,8 +647,6 @@ ${createSelect(dataPages)}
 ////////////////////////////////////////////////////////////////////////////////////////
   function collectionList(data,window){
   var selector = selectorWindow(window)
-// console.log('innnn',data)
-// console.log(window)
     if(data.Error){
       selector.find('.navCollectionBox').empty()
       selector.find('.navCollectionBox').append('<h4 class="errorMsg"><b>Error: </b>'+data.Error.name+'</h4>')
@@ -707,10 +675,7 @@ ${createSelect(dataPages)}
 
   }
   function _collectionList(data,window){
-  // console.log(window)
   var selector = $('.tab[data-tab='+window+']')
-// console.log('innnn',data)
-// console.log(window)
     if(data.Error){
       // selector.find('.navCollectionBox').empty()
       // selector.find('.navCollectionBox').append('<h4 class="errorMsg"><b>Error: </b>'+data.Error.name+'</h4>')
@@ -732,13 +697,11 @@ ${createSelect(dataPages)}
       selector.find('._dropdown ._dropdownUl li._dropdownLi .collectionsBox .collectionUl').removeClass('show').addClass('hide')
       selector.find('._dropdown ._dropdownUl li._dropdownLi.active').append('<fieldset class="collectionsBox"><legend class="plus">Collections</legend><ul class="collectionUl show"></ul></fieldset>')
       data.map(function (value,i) {
-        // console.log('vvvvvvvvvvv',value)
 
         //selector.find('.navCollectionBox ul.navCollectionUl').append('<li data-no="'+(parseInt(i)+1)+'"><span class="text">'+value.name+'</span></li>')
         selector.find('._dropdown ._dropdownUl li._dropdownLi.active .collectionsBox .collectionUl').append('<li class="collectionLi">'+value.name+'</li>')
         // var dObj = dropDownData.find(v=> v.id === value.did)
         // var dname = value.did === null ? '******' : dObj.name
-        // console.log('dnamednamedname',dname)
       })
       selector.find('._dropdown ._dropdownUl li._dropdownLi.active').addClass('pass')
       // collectionLi()
@@ -772,7 +735,6 @@ if($(this).hasClass('plus')){
   function collectionLi(){
   $('.collectionLi').click(function (event) {
     event.stopImmediatePropagation();
-    // console.log('111111111',$(this).text())
     var _window=$(this).closest('.content').attr('data-window')
     var dName = $(this).closest('.liDb').attr('data-id')
     var dNameText = $(this).closest('.liDb').find('.liDbName').text()
@@ -780,13 +742,9 @@ if($(this).hasClass('plus')){
     document.title = 'DBMS | '+dNameText+ ' | '+cName
     selectorWindow(_window).find('.navCollectionBox ul.navCollectionUl').empty()
     var thisDataLiArray = $(this).closest('.collectionUl').find('.collectionLi').each(function (i,v) {
-      // console.log('iiiii',i)
-      // console.log('vvvvv',v.text())
-      // console.log('ccccc',$(this).text())
 
       selectorWindow(_window).find('.navCollectionBox ul.navCollectionUl').append('<li data-no="'+(parseInt(i)+1)+'"><span class="text">'+$(this).text()+'</span></li>')
     })
-    // console.log('eenode',thisDataLiArray)
 
     $('.windowTabUl li.tab'+_window+'[data-tab='+_window+']').find('.cname').text(cName)
     $('.windowTabUl li.tab'+_window+'[data-tab='+_window+']').find('.dname').text(dNameText)
@@ -824,7 +782,6 @@ if($(this).hasClass('plus')){
 
   function  _dropdownLi() {
     $('._dropdownUl li .liDbName').click(function () {
-      // console.log('ddd')
       $(this).closest('._dropdownUl').find('._dropdownLi').removeClass('active fail pass')
       $(this).parent().addClass('active')
       var value = $(this).text()
@@ -878,7 +835,6 @@ if(initial){
     })
     // $('#headerContent ul.windowTabUl').append('<li class="addTab">+</li>')
 
-    // console.log('tabArray',tabArray)
     if(!initial) {
       addWindow(tabArray.length)
     }
@@ -911,9 +867,6 @@ if(initial){
 
     $('.content').removeClass('active')
 $('.content[data-window='+tabId+']').addClass('active')
-    // console.log('123',tabArray)
-    // console.log('tttt',getWindow($(this),'t')-1)
-    // console.log('tabArray',_this.hasClass( "active" ))
     if(!_this.hasClass( "active" )){
       $('.windowTabUl .tab').removeClass('active dpshow')
     }
@@ -951,7 +904,6 @@ $('.content[data-window='+tabId+']').addClass('active')
         windowId:tabArray.length+1,
         dropDown:[]
       })
-      // console.log('11111',tabArray)
       buildTabs(false)
       // addBuildTab()
     })
@@ -1007,11 +959,8 @@ $('.content[data-window='+tabId+']').addClass('active')
     $(this).addClass('selected');
     var text = $(this).data('display-text') || $(this).text();
     var _class = $(this).attr('class')
-    // console.log('_class',_class)
     $(this).closest('.dropdown').find('.current').removeClass().addClass(_class).removeClass('selected option').addClass('current').text(text);
     $(this).closest('.dropdown').prev('select').val($(this).data('value')).trigger('change');
-    // console.log('qqqqqqqq',getWindow($(this),'c'))
-    // console.log('qqqqqqqq',$(this).text())
     customSelectAction($(this),_window)
   });
 
@@ -1060,8 +1009,6 @@ $('.content[data-window='+tabId+']').addClass('active')
 var value = _this.attr('data-value'),
   resultData = tabArray[tabArrayWindowIndex(_window)].resultData.data
 
-    // console.log(value,_window)
-    // console.log('value,_window',tabArray)
     if(value === 'jsonView'){
       jsonView(_window,resultData)
     }
@@ -1108,9 +1055,6 @@ $(document).ready(function () {
   addTab()
 
   $.getScript( "js/script.js", function( data, textStatus, jqxhr ) {
-    // console.log( data ); // Data returned
-    // console.log( textStatus ); // Success
-    // console.log( jqxhr.status ); // 200s
     console.log( "Load was performed." );
   });
 
