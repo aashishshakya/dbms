@@ -3,6 +3,7 @@
 <head>
   <title>Database Management System</title>
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Livvic&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -22,12 +23,7 @@
           </select>
         </li><li class="__ib">
           <label for="exampleFormControlSelect1">Number of Data</label>
-          <select class="form-control" id="nod">
-            <option>20</option>
-            <option>50</option>
-            <option>100</option>
-            <option>200</option>
-          </select>
+
         </li>
         <li class="__ib">
           <label for="">Sort By</label>
@@ -53,33 +49,26 @@
     <div class="openModal">&#9929;</div>
     <div class="views"><div class="jsonView __ib">{ }</div><div class="arrayView __ib">[ ]</div><div class="tableView __ib">&#9782;</div></div>
   </div>
+  <div id="headerContent">
+    <div class="logo"><span class="x">{</span>
+
+      <span class="">M</span>
+      <span class="x">}</span>
+      <span class="d">D</span>
+      <span class="b">B</span>
+      <span class="m">M</span>
+      <span class="s">S</span>
+      <div class="text">Mongo Database Management System</div>
+    </div>
+    <ul class="windowTabUl __ib"></ul><span class="addTab __ib">+</span></div>
+
   <div id="content">
-      <div class="content">
-    <div class="navBox">
-      <div class="navHeader">
-          <button class="navHeading"><h3 class="__ib">Select DB</h3>
-        <ul class="dropdown">
-            <div class="liBox">
-          <li class="active"><a href="#">Profile Information</a></li>
-          <li><a href="#">Change Password</a></li>
-          <li><a href="https://codepen.io/pro">Become <b>PRO</b></a></li>
-          <li><a href="#">Help</a></li>
-          <li><a href="#">Log Out</a></li>
-            </div>
-        </ul>
-        <!--<span class="__ib">&#8675;</span>-->
-      </button></div>
-      <div class="navCollectionBox">hhh</div>
-      <div class="navFooter"><span class="download">Download</span></div></div>
-    <div id="asd"></div>
-      <div class="dataJson"><pre><code></code></pre></div>
-      </div>
-    <div class="serverBox">
-  <div class="server"><span></span><span></span></div>
-  <div class="server"><span></span><span></span></div>
-  <div class="server"><span></span><span></span></div>
-  <div class="addDBIcon">+</div>
-</div>
+<!--    <div class="serverBox">-->
+<!--  <div class="server"><span></span><span></span></div>-->
+<!--  <div class="server"><span></span><span></span></div>-->
+<!--  <div class="server"><span></span><span></span></div>-->
+<!--  <div class="addDBIcon">+</div>-->
+<!--</div>-->
 
   </div>
   
@@ -114,6 +103,7 @@
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" ></script> -->
     <script src="js/jquery-3.3.1.min.js" ></script>
     <script src="js/okmplm.js" ></script>
+    <script src="js/script.js" ></script>
   </body>
   <script type="text/javascript">
 
@@ -121,9 +111,6 @@
     var dbloadData
     baseData = JSON.parse(baseData)
     $(document).ready(function () {
-  // activeDB(baseData)
-  // addDB(baseData)
-  // console.log('baseData',baseData)
   dbMenu(baseData)
 
 
@@ -151,24 +138,30 @@
 
     var tt = 'add';
 
-    function dbHTTP(type,url,data,callback){
-      $.ajax({
+    async function dbHTTP(type,url,data,callback){
+        var statuss  = 200 ;
+
+        await $.ajax({
         method: type,
         url: url,
         data: data,
         contentType:"application/json; charset=utf-8",
         dataType: 'json',
         success: callback,
-        error: function(xhr) { 
-          var message = {
-            status : xhr.status
-          }
-
-          return message
-
-
-        }
+            error:callback
+        // error: function(xhr) {
+        //     console.log('xxxx',xhr)
+        //   var message = {
+        //     status : xhr.status
+        //   }
+        //
+        //     statuss = message
+        //
+        //
+        // }
       })
+
+        // return statuss
     }
 
     function dd(db){

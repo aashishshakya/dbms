@@ -5,323 +5,19 @@
 // __ac = dbconnection fun
 // __ad dbEdit f
 // __ae dbAdd f
+  var tabArray = [{
+    active:false,
+    did:null,
+    cid:null,
+    id:1,
+    windowId:1,
+    resultData:[]
+  }]
+  var dropDownData = [];
 
 var sortDBType = {'_id':-1},
 findByDB = {}
-var dummy2 = ["aute","ipsum","proident","amet","sunt","sint","ullamco"],
-    dummy3 =[{
-        "tags": [
-            "consectetur",
-            "exercitation",
-            "do",
-            "non",
-            "reprehenderit",
-            "ut",
-            "sit"
-        ],
-        "friends": [
-            {
-                "id": 33333,
-                "name": "Lesley Gentry"
-            },
-            {
-                "id": 1,
-                "name": "Mcbride Welch"
-            }
-        ],
-	},
-        {
-            "tags": [
-                "reprehenderit",
-                "ut",
-                "sit"
-            ],
-            "friends": [
-                {
-                    "id": 0,
-                    "name": "Lesley Gentry"
-                }
-            ],
-        }
-    ];
-
-var dummy = [
-{
-	"_id": "5d45ef6750106b3fcde1c640",
-	"index": 0,
-	"guid": "439436b6-5e17-4cad-89bf-b77fbfb402ea",
-	"isActive": false,
-	"balance": "$2,718.90",
-	"picture": "http://placehold.it/32x32",
-	"age": 30,
-	"eyeColor": "brown",
-	"name": "Combs Doyle",
-	"gender": "male",
-	"company": "QUILCH",
-	"email": "combsdoyle@quilch.com",
-	"phone": "+1 (958) 491-2097",
-	"address": "515 Brevoort Place, Silkworth, Florida, 910",
-	"about": "Excepteur ullamco deserunt laborum consectetur do cillum aliqua est elit aute. Velit labore irure nisi adipisicing reprehenderit exercitation Lorem. Cillum nulla Lorem cillum reprehenderit officia incididunt magna proident et commodo sint consequat adipisicing exercitation. Ut cupidatat consectetur exercitation velit magna nulla non. Voluptate enim nostrud consequat in irure laboris laboris ipsum dolor nostrud mollit voluptate eiusmod ipsum. Id duis do elit laborum adipisicing.\r\n",
-	"registered": "2016-01-02T06:31:24 -06:-30",
-	"latitude": 18.892767,
-	"longitude": -175.717494,
-	"tags": [
-	"consectetur",
-	"exercitation",
-	"do",
-	"non",
-	"reprehenderit",
-	"ut",
-	"sit"
-	],
-	"friends": [
-	{
-		"id": 0,
-		"name": "Lesley Gentry"
-	},
-	{
-		"id": 1,
-		"name": "Mcbride Welch"
-	},
-	{
-		"id": 2,
-		"name": "Lizzie Romero"
-	}
-	],
-	"greeting": "Hello, Combs Doyle! You have 1 unread messages.",
-	"favoriteFruit": "strawberry"
-},
-{
-	"_id": "5d45ef670f003952083b37b2",
-	"index": 1,
-	"guid": "61976785-75b0-426c-af86-fb084f8819bb",
-	"isActive": true,
-	"balance": "$3,219.13",
-	"picture": "http://placehold.it/32x32",
-	"age": 27,
-	"eyeColor": "green",
-	"name": "Maggie Alston",
-	"gender": "female",
-	"company": "ZYTREK",
-	"email": "maggiealston@zytrek.com",
-	"phone": "+1 (974) 456-3194",
-	"address": "987 Sumner Place, Grantville, Vermont, 475",
-	"about": "Nisi Lorem anim id duis magna magna et. Minim veniam quis incididunt ullamco ea sunt Lorem nostrud. Magna cupidatat ipsum cupidatat fugiat et quis veniam enim eiusmod et anim qui mollit. Ullamco cupidatat et voluptate anim eiusmod ullamco nisi sit ut ea ut veniam. Sit eu tempor ut id id amet nulla mollit. Cupidatat id sunt ex magna magna elit nostrud. Amet voluptate aliqua ullamco reprehenderit qui cupidatat laboris nostrud occaecat aliqua ullamco sint.\r\n",
-	"registered": "2019-07-20T10:01:14 -06:-30",
-	"latitude": -42.303257,
-	"longitude": -53.262668,
-	"tags": [
-	"amet",
-	"ad",
-	"nostrud",
-	"consectetur",
-	"consequat",
-	"labore",
-	"qui"
-	],
-	"friends": [
-	{
-		"id": 0,
-		"name": "Thelma Moore"
-	},
-	{
-		"id": 1,
-		"name": "Carolina Slater"
-	},
-	{
-		"id": 2,
-		"name": "Inez Joyner"
-	}
-	],
-	"greeting": "Hello, Maggie Alston! You have 8 unread messages.",
-	"favoriteFruit": "banana"
-},
-{
-	"_id": "5d45ef67ec880fd1e16b53d7",
-	"index": 2,
-	"guid": "f3f3e64e-4a8b-4ddc-bd9a-a8a52b060b47",
-	"isActive": true,
-	"balance": "$1,950.88",
-	"picture": "http://placehold.it/32x32",
-	"age": 31,
-	"eyeColor": "green",
-	"name": "Sadie Fernandez",
-	"gender": "female",
-	"company": "TALKOLA",
-	"email": "sadiefernandez@talkola.com",
-	"phone": "+1 (960) 493-2936",
-	"address": "303 Berriman Street, Dalton, Virginia, 4543",
-	"about": "Culpa ea minim eiusmod Lorem elit. Ex pariatur adipisicing irure est in adipisicing tempor sint ut culpa ea pariatur. Adipisicing magna mollit dolor cupidatat nostrud minim labore ex ea ex cillum commodo cupidatat. Do in laborum in laboris est laboris id amet culpa consequat commodo minim. Amet ut ex consectetur pariatur et deserunt.\r\n",
-	"registered": "2017-10-20T02:49:43 -06:-30",
-	"latitude": -53.666977,
-	"longitude": -92.419541,
-	"tags": [
-	"ut",
-	"enim",
-	"amet",
-	"ut",
-	"elit",
-	"cupidatat",
-	"veniam"
-	],
-	"friends": [
-	{
-		"id": 0,
-		"name": "Barbra Black"
-	},
-	{
-		"id": 1,
-		"name": "Floyd Bullock"
-	},
-	{
-		"id": 2,
-		"name": "Kline Bray"
-	}
-	],
-	"greeting": "Hello, Sadie Fernandez! You have 4 unread messages.",
-	"favoriteFruit": "apple"
-},
-{
-	"_id": "5d45ef6729e37fcd1e2715ce",
-	"index": 3,
-	"guid": "99e553ba-509b-4594-8d95-2ff32209388f",
-	"isActive": false,
-	"balance": "$1,166.20",
-	"picture": "http://placehold.it/32x32",
-	"age": 27,
-	"eyeColor": "green",
-	"name": "Vincent Rosario",
-	"gender": "male",
-	"company": "COMBOT",
-	"email": "vincentrosario@combot.com",
-	"phone": "+1 (872) 474-3787",
-	"address": "368 Osborn Street, Colton, Montana, 9596",
-	"about": "Aliquip dolor dolore do et sint id incididunt ad et. Sint minim voluptate anim commodo adipisicing dolor veniam deserunt sint est. Exercitation veniam culpa eiusmod ad cupidatat non cupidatat. Exercitation occaecat minim est aliquip officia ut do esse aliqua sint veniam.\r\n",
-	"registered": "2018-04-19T09:41:31 -06:-30",
-	"latitude": 81.467739,
-	"longitude": 3.738386,
-	"tags": [
-	"aute",
-	"ipsum",
-	"proident",
-	"amet",
-	"sunt",
-	"sint",
-	"ullamco"
-	],
-	"friends": [
-	{
-		"id": 0,
-		"name": "Delaney Burgess"
-	},
-	{
-		"id": 1,
-		"name": "Britt Hayes"
-	},
-	{
-		"id": 2,
-		"name": "Aurora Odom"
-	}
-	],
-	"greeting": "Hello, Vincent Rosario! You have 8 unread messages.",
-	"favoriteFruit": "banana"
-},
-{
-	"_id": "5d45ef6725271da7d74b2e19",
-	"index": 4,
-	"guid": "a5b27216-c829-454f-aba7-a6863113f37f",
-	"isActive": false,
-	"balance": "$3,387.54",
-	"picture": "http://placehold.it/32x32",
-	"age": 29,
-	"eyeColor": "green",
-	"name": "Maude Bates",
-	"gender": "female",
-	"company": "OTHERWAY",
-	"email": "maudebates@otherway.com",
-	"phone": "+1 (923) 457-2898",
-	"address": "936 Orange Street, Lorraine, Iowa, 5703",
-	"about": "In laboris ullamco cupidatat voluptate. Sit labore ullamco eiusmod nisi aliqua ex cillum deserunt et officia in id. Non est amet cillum occaecat consequat aliqua nostrud officia labore elit. Dolore proident excepteur dolor qui ut ad ipsum ad sunt ipsum. Sunt nisi tempor consectetur officia qui do culpa. Ipsum veniam reprehenderit consectetur velit aute veniam ex dolor. Sint minim aliqua nulla pariatur cupidatat.\r\n",
-	"registered": "2016-04-16T11:16:32 -06:-30",
-	"latitude": -1.31428,
-	"longitude": -84.388462,
-	"tags": [
-	"dolor",
-	"in",
-	"esse",
-	"Lorem",
-	"laboris",
-	"in",
-	"sunt"
-	],
-	"friends": [
-	{
-		"id": 0,
-		"name": "Felicia Hardin"
-	},
-	{
-		"id": 1,
-		"name": "Rene Johnston"
-	},
-	{
-		"id": 2,
-		"name": "Lacey Boone"
-	}
-	],
-	"greeting": "Hello, Maude Bates! You have 6 unread messages.",
-	"favoriteFruit": "strawberry"
-},
-{
-	"_id": "5d45ef6733b88185005e5c89",
-	"index": 5,
-	"guid": "5398a66e-c14a-4133-bced-8266b8db8c38",
-	"isActive": true,
-	"balance": "$1,966.24",
-	"picture": "http://placehold.it/32x32",
-	"age": 33,
-	"eyeColor": "brown",
-	"name": "Edwina Walsh",
-	"gender": "female",
-	"company": "INJOY",
-	"email": "edwinawalsh@injoy.com",
-	"phone": "+1 (881) 490-2688",
-	"address": "993 Stryker Street, Lafferty, Wisconsin, 3561",
-	"about": "Adipisicing quis cupidatat occaecat cillum aute. Velit fugiat ea duis commodo consectetur incididunt minim excepteur ex et. Non dolor anim culpa eiusmod incididunt sit voluptate cillum in excepteur officia tempor. Laboris cillum aliqua tempor nisi. Consequat aliqua ut laborum dolore ad ea adipisicing nulla enim. Nostrud culpa officia velit pariatur consequat qui. Amet labore ullamco amet Lorem aliquip incididunt et et mollit.\r\n",
-	"registered": "2018-06-29T06:31:13 -06:-30",
-	"latitude": -56.256668,
-	"longitude": -75.787355,
-	"tags": [
-	"voluptate",
-	"aliqua",
-	"id",
-	"ea",
-	"cillum",
-	"non",
-	"cupidatat"
-	],
-	"friends": [
-	{
-		"id": 0,
-		"name": "Vargas Serrano"
-	},
-	{
-		"id": 1,
-		"name": "Caitlin Lowery"
-	},
-	{
-		"id": 2,
-		"name": "Sallie Jackson"
-	}
-	],
-	"greeting": "Hello, Edwina Walsh! You have 2 unread messages.",
-	"favoriteFruit": "banana"
-}
-]
-
-
 function __aa(data,type){
-					// console.log('dddddddddddddddddddd',data)
-
 					var btnS1 = 'Edit', btnS2 = 'Connect', btnS3 = 'Delete', addClass = '', class1 = '',class3 = '';
 					if(type == 'add'){
 						addClass = 'addingDB'
@@ -371,9 +67,6 @@ function __ab(baseData){
 		var newBaseData = baseData.slice();
 
 		newBaseData.push(myElement)
-
-		// console.log('baseData',baseData)
-		// console.log('newBaseData',newBaseData)
 		__aa(newBaseData,'add')
 // if (tt == 'add'){
 
@@ -458,11 +151,6 @@ function __ae(){
 	})
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function __dbUpdate(){
-	$('.dbUpdate').click(function(){
-		alert()
-	})
-}
 ////////////////////////////////////////////////////////////////////////////////////////
 function btnCancel(){
 	$('.btnCancel').click(function(){
@@ -516,7 +204,7 @@ function getCollection(){
 		findByDB = {}
 		$('.clearFilter').removeClass('enable')
 
-		console.log('findByDBfindByDB',findByDB)
+		// console.log('findByDBfindByDB',findByDB)
 	})
 
 	function collection(id){
@@ -576,11 +264,20 @@ function loading(type,msg){
 
 	}
 }
+  function loader(th, type){
+    if(type == 'show'){
+      th.find('.loader2').remove()
+      th.prepend('<i class="loader2"></i>')
+    }else{
+      th.find('.loader2').remove()
+
+    }
+  }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
 function getDBData(){
-	console.log('1111')
+	// console.log('1111')
 	var dName = $('#db').val()
 	var cName = $('#Collection').val()
 	var limit = parseInt($('#nod').val())
@@ -641,10 +338,16 @@ getDBData()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+
+  function tableView(_window,w){
+    var selector = selectorWindow(_window,'c')
+    selector.find('.dataBox').empty()
+    selector.find('.dataBox').html(json2Table(w))
+  }
 let ttable = 0;
 
 function json2Table(json) {
-
+// console.log('jsonjsonjson',json)
 	ttable += 1
 
 
@@ -747,15 +450,15 @@ function addSortBy(){
 ////////////////////////////////////////////////////////////////////////////////////////
 
 function findBy(){
-	console.log('hi')
+	// console.log('hi')
 	$('.find').click(function(){
-		console.log('222222222222')
+		// console.log('222222222222')
 
 		$('#findModel,#modelBg').fadeIn()
 		$('#findValue').val('')
 		var key = $(this).parents('th').find('h4').text()
 		var paretskeyLength = $(this).parents('table').length
-		console.log('keykeykey',key)
+		// console.log('keykeykey',key)
 		var  paretskey = [] ;
 		for (var i = 0; i < paretskeyLength-1; i++) {
 			paretskey.push($(this).parents('table').parent('td').eq(i).attr('data-for'))
@@ -770,7 +473,7 @@ function findBy(){
 			key = paretskey.join('.')+'.'+key
 		}
 
-		console.log('kkkkkk',key)
+		// console.log('kkkkkk',key)
 		$('#findModel h3').html('Find in <b class="bKey">'+key+'</b> Column')
 
 	})
@@ -783,7 +486,7 @@ function findData(){
 
 	$('#findSearch').click(function(){
 		var key = $('#findModel .bKey').text()
-		console.log('key',key)
+		// console.log('key',key)
 		var findType = $("input:radio[name=findType]:checked").val()
 		var findValue = $('#findValue').val()
 		findByDB = {}
@@ -798,7 +501,7 @@ function findData(){
 }else{
   	// console.log('canc',person)
   }
-  console.log('findByDB',findByDB)
+  // console.log('findByDB',findByDB)
 
 })
 
@@ -813,7 +516,7 @@ function findData(){
 ////////////////////////////////////////////////////////////////////////////////////////
 function clearFilter(){
 	$('.clearFilter').click(function(){
-		console.log('ddddd',$(this).hasClass('enable'))
+		// console.log('ddddd',$(this).hasClass('enable'))
 		if($(this).hasClass('enable')){
 			$(this).removeClass('enable')
 			findByDB = {}
@@ -826,74 +529,563 @@ function clearFilter(){
 	})
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function jsonHTMLView(){
-	$('.jsonView').click(function(){
-		$('#asd').empty()
-		$('#asd').html('<pre>'+JSON.stringify(dbloadData, undefined, 2)+'</pre>')
-    // $('#asd').html('<pre>'+JSON.stringify(dbloadData,  null, '\t')+'</pre>')
+function jsonHTMLView(w){
+	$('.jsonView').click(function(e){
+    e.stopImmediatePropagation();
+    var _window = getWindow($(this),'c')
+    jsonView(_window,w)
 })
-	$('.arrayView').click(function(){
-		$('#asd').empty()
-		$('#asd').html(json2DView(dbloadData))
-		// $('#asd').html(jsonDView(dbloadData))
-    // $('#asd').html('<pre>'+JSON.stringify(dbloadData,  null, '\t')+'</pre>')
+	$('.arrayView').click(function(e){
+    e.stopImmediatePropagation();
+    var _window = getWindow($(this),'c')
+    arrayView(_window,w)
 })
-	$('.tableView').click(function(){
-		$('#asd').empty()
-		$('#asd').html(json2Table(dbloadData))
-
+	$('.tableView').click(function(e){
+    e.stopImmediatePropagation();
+    var _window = getWindow($(this),'c')
+    tableView(_window,w)
+    // var selector = selectorWindow(_window,'c')
+    // selector.find('.dataBox').empty()
+    // selector.find('.dataBox').html(json2Table(w))
 	})
 
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-    function json2DView(json) {
-        if(Array.isArray(json)){
-            var html = $('<ul class="__arrayUl"></ul>'), li;
-            $.each(json, function(key,value){
-                li = html.append('<li><span class="value __ib __va-t"></span></li>')
-                if( typeof value === "object"){
-                    li.children().last().find('.value').append(json2DView(value));
-                }
-                else {
-                    li.children().last().find('.value').text(value);
-                }
-
-            })
-            return html
-        }
-        var html = $('<ul class="__objectUl"></ul>'), li;
-        // for( i in json) {
-        $.each(json, function(key,value){
-            li = html.append('<li><span class="key __ib __va-t">'+key+'</span> <span class="colun __ib __va-t">:</span> <span class="value __ib __va-t"></span></li>')
-            if( typeof value === "object"){
-                li.children().last().find('.value').append(json2DView(value));
-            }
-            else {
-                li.children().last().find('.value').text(value);
-            }
-
-        })
-        return html;
-    }
 ////////////////////////////////////////////////////////////////////////////////////////
 	function renderDBList(dbsList){
         dbsList.map(function(v){
-            $('#content .content .navBox .navHeader .navHeading .dropdown .liBox').append($('<li>').text(v.name));
+            $('#content .content .navBox .navHeader .navHeading .dropdown .liBox').append($('<li class="liDb" data-id="'+v.id+'">').html('<h4 class="liDbName">'+v.name+'</h4>'));
         })
 	}
 ////////////////////////////////////////////////////////////////////////////////////////
+  let windowNo = 1
+  function createContentBox(){
+  $('#content').prepend($('<div />',{
+    class : 'content window'+windowNo,
+    'data-window' : windowNo,
+    html : `<div class="navBox toggle">
+      <div class="navHeader">
+          <button class="navHeading"><h3 class="__ib heading">Select DB</h3>
+        <ul class="dropdown">
+            <div class="liBox">
+            </div>
+        </ul>
+      </button></div>
+      <div class="navCollectionBox"></div>
+      <div class="navFooter"><span class="download">Download</span></div></div><div class="dataInfo"><span class="infoTotal">Total : 12231</span></div><div class="dataBox"></div>`
+  }))
+    $('#headerContent ul.windowTabUl').append('<li class="tab'+windowNo+'" data-tab="'+windowNo+'"><div class="dname">********</div><hr><div class="cname">*********</div></li><li class="addTab">+</li>')
+    renderDBList(baseData)
+    liDBSelect()
+    // stayRightBox()
+    windowNo ++
+  }
+//////////////////////////////////////////////////////////////////////////////////////// dd
+  function liDBSelect(){
+  $('.liBox li .liDbName').click(function () {
+    $(this).closest('.navHeading').find('.dropdown li').removeClass('active fail pass')
+    $(this).parent().addClass('active')
+    var value = $(this).text()
+    var id = $(this).parent().attr('data-id')
+    $(this).closest('.navHeading').find('h3').attr('data-id',id).text(value)
+    var _window=$(this).closest('.content').attr('data-window')
+    $('#headerContent .tab[data-tab='+_window+']').removeClass('dpshow')
+    _getCollection(id,_window)
+    $('.windowTabUl li.tab'+_window+'[data-tab='+_window+']').find('.dname').text(value)
+    $('.windowTabUl li.tab'+_window+'[data-tab='+_window+']').find('.cname').text('**********')
+    $(this).closest('.navHeading').addClass('active')
+  })
+  }
+//////////////////////////////////////////////////////////////////////////////////////// we are using v2
+   async function _getCollection(id,_window){
+    var data = {id}
+    var values ;
+      values = {	"for": "dbConnect",	values : data}
+     loader($('#headerContent .tab[data-tab='+_window+']'),'show')
+     $('#headerContent .tab[data-tab='+_window+']').removeClass('dpshow')
+     await dbHTTP('post','/',JSON.stringify(values),function(resultData){
+       loader($('#headerContent .tab[data-tab='+_window+']'),'hide')
+       if(resultData.Error === undefined){
+  // console.log('resultData.Errord',resultData.Error)
+         var dropDownDataIndex = dropDownData.findIndex((obj => obj.id == id));
+         var tabArrayIndex = tabArray.findIndex((obj => obj.windowId == _window));
+         dropDownData[dropDownDataIndex].collections = resultData
+         // tabArray[tabArrayIndex].did = parseInt(id)
+         var dObj = dropDownData.find(value=> value.id === parseInt(id))
+}
+
+      _collectionList(resultData,_window)
+       $('#headerContent .tab[data-tab='+_window+']').addClass('dpshow')
+      // $('.window'+_window+'[data-window='+_window+']').find('.navHeading').removeClass('active')
+    })
+  }
+
+
+  function _getDBData(dName,cName,limit,_window){
+    var data = {dName:dName,cName:cName,limit,sort:sortDBType,find:findByDB}
+    var values = {  "for": "dbDocumentConnect", values : data}
+    var selector = selectorWindow(_window,'c')
+
+
+    loader($('#headerContent .tab[data-tab='+_window+']'),'show')
+    $('#headerContent .tab[data-tab='+_window+']').removeClass('dpshow')
+
+
+    dbHTTP('post','/',JSON.stringify(values),function(resultData){
+
+      if(resultData.Error === undefined){
+        // var dropDownDataIndex = dropDownData.findIndex((obj => obj.id == dName));
+        var tabArrayIndex = tabArray.findIndex((obj => obj.windowId == _window));
+        // dropDownData[dropDownDataIndex].collections = resultData
+        tabArray[tabArrayIndex].resultData = resultData
+        tabArray[tabArrayIndex].did = parseInt(dName)
+        tabArray[tabArrayIndex].cid = cName
+        var dObj = dropDownData.find(value=> value.id === parseInt(dName))
+        var dname = dObj.name
+        $('#headerContent .tab[data-tab='+_window+']').find('.dname').text(dname)
+        selectorWindow(_window,'t').find('.cname').text(cName)
+      }
+      loader($('#headerContent .tab[data-tab='+_window+']'),'hide')
+
+// console.log('resultData',resultData)
+      dbloadData = resultData.data
+      selector.find('.dataInfo').remove()
+      selector.removeClass('gradientBG')
+      selector.prepend(`
+<div class="dataInfo">
+<div class="views dataInfoBox"><span class="title">Data Box View : </span>
+${createSelect(dataPages)}
+</div>
+<div class="dataInfoBox"><span class="title">Filter : </span></div>
+<div class="dataInfoBox"> <span class="title">Pages : </span> <div class="__ib"><select>
+            <option data-display-text="20">20</option>
+            <option>50</option>
+            <option>100</option>
+            <option>200</option>
+          </select></div></div>
+          <div class="dataInfoBox" id="dddd"><span class="title">Data View : </span> ${createSelect(dataView)}</div>
+           <div class="dataInfoBox"><span class="title">Total : </span><span class="infoTotal">${resultData.details.count}</span></div>
+</div>`)
+      selector.find('.dataBox').html(json2Table(resultData.data))
+      jsonHTMLView(resultData.data)
+      sortDoc()
+      findBy()
+      // customSelect()
+      create_custom_dropdowns()
+    })
+  }
 ////////////////////////////////////////////////////////////////////////////////////////
+  function collectionList(data,window){
+  var selector = selectorWindow(window)
+// console.log('innnn',data)
+// console.log(window)
+    if(data.Error){
+      selector.find('.navCollectionBox').empty()
+      selector.find('.navCollectionBox').append('<h4 class="errorMsg"><b>Error: </b>'+data.Error.name+'</h4>')
+      selector.find('.dropdown .liBox li.active').addClass('fail')
+    }else if(data.status == 0){
+      selector.find('.navCollectionBox').empty()
+      selector.find('.navCollectionBox').append('<h4 class="errorMsg"><b>Error: </b>Network Error</h4>')
+      selector.find('.dropdown .liBox li.active').addClass('fail')
+
+    }else{
+      selector.find('.navCollectionBox ul').remove()
+      selector.find('.navCollectionBox').html('<ul class="navCollectionUl"></ul>')
+      selector.find('.dropdown .liBox li.active .collectionsBox').remove()
+      selector.find('.dropdown .liBox li .collectionsBox legend').removeClass('plus').addClass('minus')
+      selector.find('.dropdown .liBox li .collectionsBox .collectionUl').removeClass('show').addClass('hide')
+      selector.find('.dropdown .liBox li.active').append('<fieldset class="collectionsBox"><legend class="plus">Collections</legend><ul class="collectionUl show"></ul></fieldset>')
+      data.map(function (value,i) {
+        selector.find('.navCollectionBox ul.navCollectionUl').append('<li data-no="'+(parseInt(i)+1)+'"><span class="text">'+value.name+'</span></li>')
+        selector.find('.dropdown .liBox li.active .collectionsBox .collectionUl').append('<li class="collectionLi">'+value.name+'</li>')
+
+      })
+      selector.find('.dropdown .liBox li.active').addClass('pass')
+      collectionLi()
+      navCollectionUl()
+    }
+
+  }
+  function _collectionList(data,window){
+  // console.log(window)
+  var selector = $('.tab[data-tab='+window+']')
+// console.log('innnn',data)
+// console.log(window)
+    if(data.Error){
+      // selector.find('.navCollectionBox').empty()
+      // selector.find('.navCollectionBox').append('<h4 class="errorMsg"><b>Error: </b>'+data.Error.name+'</h4>')
+      // selector.find('.dropdown .liBox li.active').addClass('fail')
+      selector.find('._dropdown ._dropdownUl li._dropdownLi.active').addClass('fail')
+    }else if(data.status == 0){
+      // selector.find('.navCollectionBox').empty()
+      // selector.find('.navCollectionBox').append('<h4 class="errorMsg"><b>Error: </b>Network Error</h4>')
+      // selector.find('.dropdown .liBox li.active').addClass('fail')
+      selector.find('._dropdown ._dropdownUl li._dropdownLi.active').addClass('fail')
+
+
+    }else{
+      // selector.find('.navCollectionBox ul').remove()
+      // selector.find('.navCollectionBox').html('<ul class="navCollectionUl"></ul>')
+      // selector.find('#headerContent .tab .dname').remove()
+      selector.find('._dropdown ._dropdownUl li._dropdownLi.active .collectionsBox').remove()
+      selector.find('._dropdown ._dropdownUl li._dropdownLi .collectionsBox legend').removeClass('plus').addClass('minus')
+      selector.find('._dropdown ._dropdownUl li._dropdownLi .collectionsBox .collectionUl').removeClass('show').addClass('hide')
+      selector.find('._dropdown ._dropdownUl li._dropdownLi.active').append('<fieldset class="collectionsBox"><legend class="plus">Collections</legend><ul class="collectionUl show"></ul></fieldset>')
+      data.map(function (value,i) {
+        // console.log('vvvvvvvvvvv',value)
+
+        //selector.find('.navCollectionBox ul.navCollectionUl').append('<li data-no="'+(parseInt(i)+1)+'"><span class="text">'+value.name+'</span></li>')
+        selector.find('._dropdown ._dropdownUl li._dropdownLi.active .collectionsBox .collectionUl').append('<li class="collectionLi">'+value.name+'</li>')
+        // var dObj = dropDownData.find(v=> v.id === value.did)
+        // var dname = value.did === null ? '******' : dObj.name
+        // console.log('dnamednamedname',dname)
+      })
+      selector.find('._dropdown ._dropdownUl li._dropdownLi.active').addClass('pass')
+      // collectionLi()
+      // navCollectionUl()
+    }
+    _collectionLi()
+  }
 ////////////////////////////////////////////////////////////////////////////////////////
+  function progress(ht,msg){
+ht.html('<ul class="progress"><li></li><li></li><li></li><li></li><li></li></ul>')
+  }
+
 ////////////////////////////////////////////////////////////////////////////////////////
+  function collectionExpend(){
+  $('body').on('click','legend',function () {
+    // var _window=$(this).closest('.content').attr('data-window')
+    // var selector = $('.window'+_window+'[data-window='+_window+']')
+if($(this).hasClass('plus')){
+  $(this).toggleClass('plus minus')
+  $(this).next('.collectionUl').toggleClass('show hide')
+}else {
+  $(this).toggleClass('plus minus')
+  $(this).next('.collectionUl').toggleClass('show hide')
+
+}
+
+
+  })
+  }
 ////////////////////////////////////////////////////////////////////////////////////////
+  function collectionLi(){
+  $('.collectionLi').click(function (event) {
+    event.stopImmediatePropagation();
+    // console.log('111111111',$(this).text())
+    var _window=$(this).closest('.content').attr('data-window')
+    var dName = $(this).closest('.liDb').attr('data-id')
+    var dNameText = $(this).closest('.liDb').find('.liDbName').text()
+    var cName = $(this).text()
+    document.title = 'DBMS | '+dNameText+ ' | '+cName
+    selectorWindow(_window).find('.navCollectionBox ul.navCollectionUl').empty()
+    var thisDataLiArray = $(this).closest('.collectionUl').find('.collectionLi').each(function (i,v) {
+      // console.log('iiiii',i)
+      // console.log('vvvvv',v.text())
+      // console.log('ccccc',$(this).text())
+
+      selectorWindow(_window).find('.navCollectionBox ul.navCollectionUl').append('<li data-no="'+(parseInt(i)+1)+'"><span class="text">'+$(this).text()+'</span></li>')
+    })
+    // console.log('eenode',thisDataLiArray)
+
+    $('.windowTabUl li.tab'+_window+'[data-tab='+_window+']').find('.cname').text(cName)
+    $('.windowTabUl li.tab'+_window+'[data-tab='+_window+']').find('.dname').text(dNameText)
+    selectorWindow(_window).find('.navBox .navHeader .navHeading .heading').text(dNameText)
+    _getDBData(dName,cName,20,_window)
+    navCollectionUl()
+  })
+
+  }
+  function _collectionLi(){
+  $('.collectionLi').click(function (event) {
+    event.stopImmediatePropagation();
+    var _window=$(this).closest('.tab').attr('data-tab')
+    var dName = $(this).closest('._dropdownLi').attr('data-id')
+    var dNameText = $(this).closest('._dropdownLi').find('.liDbName').text()
+    var cName = $(this).text()
+    // document.title = 'DBMS | '+dNameText+ ' | '+cName
+    // $(this).closest('.tab').find('.cname').text(cName)
+    // $(this).closest('.tab').find('.dname').text(dNameText)
+    _getDBData(dName,cName,20,_window)
+  })
+  }
+
+  function navCollectionUl() {
+    $('.navCollectionUl li').click(function () {
+      var _window=$(this).closest('.content').attr('data-window')
+      var dName = $(this).closest('.navBox').find('.navHeader .navHeading .heading').attr('data-id')
+      var cName = $(this).find('.text').text()
+      $(this).closest('.navCollectionUl').find('li').removeClass('active')
+      $(this).addClass('active')
+      $('.windowTabUl li.tab'+_window+'[data-tab='+_window+']').find('.cname').text(cName)
+      _getDBData(dName,cName,20,_window)
+    })
+  }
+
+  function  _dropdownLi() {
+    $('._dropdownUl li .liDbName').click(function () {
+      // console.log('ddd')
+      $(this).closest('._dropdownUl').find('._dropdownLi').removeClass('active fail pass')
+      $(this).parent().addClass('active')
+      var value = $(this).text()
+      var id = $(this).parent().attr('data-id')
+      // $(this).closest('.tab').find('.dname').text(value)
+      var _window=$(this).closest('.tab').attr('data-tab')
+      _getCollection(id,_window)
+      // $(this).closest('.tab').find('.dname').text(value)
+      // $(this).closest('.tab').find('.cname').text('**********')
+      // $(this).closest('.navHeading').addClass('active')
+    })
+  }
+
 ////////////////////////////////////////////////////////////////////////////////////////
+
+  function bodyFunc(){
+    $("html, body").on('click',function(e) {
+      $('.navBox').addClass('toggle')
+    })
+    $('body').on('click','legend',function () {
+      if($(this).hasClass('plus')){
+        $(this).toggleClass('plus minus')
+        $(this).next('.collectionUl').toggleClass('show hide')
+      }else {
+        $(this).toggleClass('plus minus')
+        $(this).next('.collectionUl').toggleClass('show hide')
+      }
+    })
+    $('body').on('click','.navHeading',function (e) {
+        e.stopPropagation();
+      $(this).parents('.navBox').removeClass('toggle')
+
+    })
+
+  }
 ////////////////////////////////////////////////////////////////////////////////////////
+  function buildTabs(initial){
+    $('#headerContent ul.windowTabUl').empty()
+    tabArray.map(function (v,index) {
+      var dObj = dropDownData.find(value=> value.id === v.did)
+      var dname = v.did === null ? index+1 : dObj.name
+      var cname = v.cid === null ? 'New Tab' : v.cid
+      var i = index+1
+      $('#headerContent ul.windowTabUl .tab').removeClass('active')
+      $('#headerContent ul.windowTabUl').append('<fieldset class="tab active dpshow" data-tab="'+i+'"><legend class="dname">'+dname+'</legend><div><hr><div class="cname">'+cname+'</div></div></fieldset>')
+
+if(initial){
+  addWindow(i)
+}
+
+    })
+    // $('#headerContent ul.windowTabUl').append('<li class="addTab">+</li>')
+
+    // console.log('tabArray',tabArray)
+    if(!initial) {
+      addWindow(tabArray.length)
+    }
+    tabClick()
+
+    // $('#headerContent ul.windowTabUl').append('<li class="tab'+windowNo+'" data-tab="'+windowNo+'"><div class="dname">********</div><hr><div class="cname">*********</div></li><li class="addTab">+</li>')
+  }
+  function defaultDropdown(){
+    let defaultDropdown =  baseData.map(function (v) {
+      return {id:v.id, name:v.name, tag:v.for, collections:[]}
+    })
+    dropDownData = defaultDropdown
+  }
+
+
+  function addWindow(windowNo){
+  $('#content .content').removeClass('active')
+    $('#content').prepend($('<div />',{
+      class : 'content active gradientBG',
+      'data-window' : windowNo,
+      html : `<div class="dataBox"><div class="welcomeMessage">Online Mongo Database Management System</div>`
+    }))
+  }
+
+//////////////////////////////////////////////////////////////////////////////////////// v2
+  function tabClick(){
+  $('.windowTabUl .tab > div, .windowTabUl .tab .dname, .windowTabUl .tab hr').click(function(){
+    var tabId = $(this).parent().attr('data-tab')
+    var _this = $(this).parent()
+
+    $('.content').removeClass('active')
+$('.content[data-window='+tabId+']').addClass('active')
+    // console.log('123',tabArray)
+    // console.log('tttt',getWindow($(this),'t')-1)
+    // console.log('tabArray',_this.hasClass( "active" ))
+    if(!_this.hasClass( "active" )){
+      $('.windowTabUl .tab').removeClass('active dpshow')
+    }
+    if(tabArray[getWindow($(this),'t')-1].cid !== null && !_this.hasClass( "active" )){
+      _this.addClass('active')
+}else{
+  _this.addClass('active dpshow')
+      _this.find('._dropdown').remove()
+      _this.append('<div class="_dropdown"><div class="_liBox"><ul class="_dropdownUl"></ul></div></div>')
+      dropDownData.map(function(v,i){
+        _this.find('._dropdown ._dropdownUl').append('<li class="_dropdownLi" data-id="'+v.id+'"><h4 class="liDbName">'+v.name+'</h4></li>')
+        if(v.collections.length >= 1) {
+          _this.find('._dropdown ._dropdownUl li._dropdownLi').last().append('<fieldset class="collectionsBox"><legend class="minus">Collections</legend><ul class="collectionUl hide"></ul></fieldset>')
+          v.collections.map(function (value, i) {
+            _this.find('._dropdown ._dropdownUl li._dropdownLi').last().find('.collectionsBox .collectionUl').append('<li class="collectionLi">'+value.name+'</li>')
+
+          })
+        }
+      })
+}
+
+
+    _dropdownLi()
+    _collectionLi()
+  })
+
+  }
+  function addTab(){
+    $('.addTab').click(function(e){
+      e.stopPropagation();
+      tabArray.push({
+        active:true,
+        did:null,
+        cid:null,
+        windowId:tabArray.length+1,
+        dropDown:[]
+      })
+      // console.log('11111',tabArray)
+      buildTabs(false)
+      // addBuildTab()
+    })
+
+  }
 ////////////////////////////////////////////////////////////////////////////////////////
+  function create_custom_dropdowns() {
+    $('select').each(function(i, select) {
+      if (!$(this).next().hasClass('dropdown')) {
+        $(this).after('<div class="dropdown ' + ($(this).attr('class') || '') + '" tabindex="0"><span class="current"></span><div class="list"><ul></ul></div></div>');
+        var dropdown = $(this).next();
+        var options = $(select).find('option');
+        var selected = $(this).find('option:selected');
+        dropdown.find('.current').addClass(selected.val()).html(selected.data('display-text') || selected.text());
+        options.each(function(j, o) {
+          var display = $(o).data('display-text') || '';
+          dropdown.find('ul').append('<li class="option ' + $(o).val() +' '+ ($(o).is(':selected') ? 'selected' : '') + '" data-value="' + $(o).val() + '" data-display-text="' + display + '">' + $(o).text() + '</li>');
+        });
+      }
+    });
+  }
+
+// Event listeners
+
+// Open/close
+  $(document).on('click', '.dropdown', function(event) {
+    $('.dropdown').not($(this)).removeClass('open');
+    $(this).toggleClass('open');
+    if ($(this).hasClass('open')) {
+      $(this).find('.option').attr('tabindex', 0);
+      $(this).find('.selected').focus();
+    } else {
+      $(this).find('.option').removeAttr('tabindex');
+      $(this).focus();
+    }
+  });
+// Close when clicking outside
+  $(document).on('click', function(event) {
+    if ($(event.target).closest('.dropdown').length === 0) {
+      $('.dropdown').removeClass('open');
+      $('.dropdown .option').removeAttr('tabindex');
+    }
+    if ($(event.target).closest('.tab').length === 0) {
+      $('.tab').removeClass('dpshow');
+      // $('.dropdown .option').removeAttr('tabindex');
+    }
+    event.stopPropagation();
+  });
+// Option click
+  $(document).on('click', '.dropdown .option', function(event) {
+    const _window = getWindow($(this),'c')
+    $(this).closest('.list').find('.selected').removeClass('selected');
+    $(this).addClass('selected');
+    var text = $(this).data('display-text') || $(this).text();
+    var _class = $(this).attr('class')
+    // console.log('_class',_class)
+    $(this).closest('.dropdown').find('.current').removeClass().addClass(_class).removeClass('selected option').addClass('current').text(text);
+    $(this).closest('.dropdown').prev('select').val($(this).data('value')).trigger('change');
+    // console.log('qqqqqqqq',getWindow($(this),'c'))
+    // console.log('qqqqqqqq',$(this).text())
+    customSelectAction($(this),_window)
+  });
+
+// Keyboard events
+  $(document).on('keydown', '.dropdown', function(event) {
+    var focused_option = $($(this).find('.list .option:focus')[0] || $(this).find('.list .option.selected')[0]);
+    // Space or Enter
+    if (event.keyCode == 32 || event.keyCode == 13) {
+      if ($(this).hasClass('open')) {
+        focused_option.trigger('click');
+      } else {
+        $(this).trigger('click');
+      }
+      return false;
+      // Down
+    } else if (event.keyCode == 40) {
+      if (!$(this).hasClass('open')) {
+        $(this).trigger('click');
+      } else {
+        focused_option.next().focus();
+      }
+      return false;
+      // Up
+    } else if (event.keyCode == 38) {
+      if (!$(this).hasClass('open')) {
+        $(this).trigger('click');
+      } else {
+        var focused_option = $($(this).find('.list .option:focus')[0] || $(this).find('.list .option.selected')[0]);
+        focused_option.prev().focus();
+      }
+      return false;
+      // Esc
+    } else if (event.keyCode == 27) {
+      if ($(this).hasClass('open')) {
+        $(this).trigger('click');
+      }
+      return false;
+    }
+  });
+
+  // $(document).ready(function() {
+  //   create_custom_dropdowns();
+  // });
 ////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
+  function customSelectAction(_this,_window){
+var value = _this.attr('data-value'),
+  resultData = tabArray[tabArrayWindowIndex(_window)].resultData.data
+
+    // console.log(value,_window)
+    // console.log('value,_window',tabArray)
+    if(value === 'jsonView'){
+      jsonView(_window,resultData)
+    }
+    if(value === 'arrayView'){
+      arrayView(_window,resultData)
+    }
+    if(value === 'tableView'){
+      tableView(_window,resultData)
+    }
+    if(value === 'singleView'){
+      // tableView(_window,resultData)
+    }
+    if(value === 'splitView'){
+      // tableView(_window,resultData)
+    }
+    if(value === 'squareView'){
+      // tableView(_window,resultData)
+    }
+  }
+
+  function tabArrayWindowIndex(windowId){
+    var tabArrayIndex = tabArray.findIndex((obj => obj.windowId == windowId));
+    return tabArrayIndex
+  }
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -901,14 +1093,26 @@ function jsonHTMLView(){
 
 $(document).ready(function () {
 	__aa(baseData)
+  defaultDropdown()
 	__ab(baseData)
 	openModal()
-	jsonHTMLView()
+	// jsonHTMLView()
 	getCollection()
 	addSortBy()
 	clearFilter()
 	findData()
     renderDBList(baseData)
+  // createContentBox()
+  bodyFunc()
+  buildTabs(true)
+  addTab()
+
+  $.getScript( "js/script.js", function( data, textStatus, jqxhr ) {
+    // console.log( data ); // Data returned
+    // console.log( textStatus ); // Success
+    // console.log( jqxhr.status ); // 200s
+    console.log( "Load was performed." );
+  });
 
 })
 
