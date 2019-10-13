@@ -1,5 +1,5 @@
 (()=> {
-
+// e.stopImmediatePropagation();
 // __aa = modal add db data print activeDB f
 // __ab = adddb button click
 // __ac = dbconnection fun
@@ -11,8 +11,12 @@
     cid:null,
     id:1,
     windowId:1,
-    resultData:[]
+    resultData:[],
+    sortDBType : {'_id':-1},
+    findByDB : {},
+    keys:[]
   }]
+  const sortType = [{name:'ASC',value:1},{name:'DESC',value:-1}]
   var dropDownData = [];
 
 var sortDBType = {'_id':-1},
@@ -294,38 +298,51 @@ function getDBData(){
 
 ////////////////////////////////////////////////////////////////////////////////////////
 function sortDoc(){
-	$('.sort').click(function(){
-
+	$('.sort span').click(function(e){
+    e.stopImmediatePropagation();
+    var _window = getWindow($(this),'c');
+    var windowIndex = tabArrayWindowIndex(_window)
+    var dName = tabArray[windowIndex].did
+    var cName = tabArray[windowIndex].cid
+    var sortDBType = tabArray[windowIndex].sortDBType
+    var find = tabArray[windowIndex].findByDB
+    // _getDBData(dName,cName,20,_window,sortDBType,find)
+    console.log('className', $(this).attr('class'))
+// return false
 		if($(this).hasClass('desc')){
-			$(this).removeClass('desc')
-			$(this).addClass('asc').text('as')
-			var sortKey = $(this).parents('th').find('h4').text()
+			$(this).parent().removeClass('desc')
+			// $(this).addClass('asc').text('as')
+			var sortKey = $(this).closest('th').find('h4').text()
 			var sortValue = 1
 			sortDBType = {[sortKey]:sortValue}
 			loading('show','Data Loading... ')
 
-			getDBData()
+      _getDBData(dName,cName,20,_window,sortDBType,find)
 
-		}else if($(this).hasClass('asc')){
-$(this).removeClass('asc')
-$(this).addClass('desc').text('de')
+    }
+		if($(this).hasClass('asc')){
+$(this).parent().removeClass('asc')
+// $(this).addClass('desc').text('de')
 var sortKey = $(this).parents('th').find('h4').text()
 var sortValue = -1
 sortDBType = {[sortKey]:sortValue}
 loading('show','Data Loading... ')
 
-getDBData()
-}else{
-	$(this).removeClass('asc')
+      _getDBData(dName,cName,20,_window,sortDBType,find)
 
-	$(this).addClass('desc').text('de')
-	var sortKey = $(this).parents('th').find('h4').text()
-	var sortValue = -1
-	sortDBType = {[sortKey]:sortValue}
-		loading('show','Data Loading... ')
-
-		getDBData()
-	}
+}
+	// 	else{
+	// $(this).removeClass('asc')
+  //
+	// $(this).addClass('desc').text('de')
+	// var sortKey = $(this).parents('th').find('h4').text()
+	// var sortValue = -1
+	// sortDBType = {[sortKey]:sortValue}
+	// 	loading('show','Data Loading... ')
+  //
+  //     _getDBData(dName,cName,20,_window,sortDBType,find)
+  //
+  //   }
 	addSortBy()
 })
 }
@@ -335,16 +352,24 @@ getDBData()
   function tableView(_window,w){
     var selector = selectorWindow(_window,'c')
     selector.find('.dataBox').empty()
-    selector.find('.dataBox').html(json2Table(w))
+    selector.find('.dataBox').html(json2Table(w,_window))
+    sortDoc()
+    findBy()
   }
 let ttable = 0;
+  let ram = [];
 
-function json2Table(json) {
+function json2Table(json,_window) {
+  var windowIndex = tabArrayWindowIndex(_window)
+var sortDBType = tabArray[windowIndex].sortDBType
+
+
+
 	ttable += 1
 
 
 	let keys = []
-	if(json.length !== undefined && typeof json == 'object'){
+  if(json.length !== undefined && typeof json == 'object'){
 
 		json.map(v =>{
 			var key = Object.keys(v)
@@ -353,6 +378,7 @@ function json2Table(json) {
   // keys = Object.assign(keys, key)
 
 })
+
 		var table = $('<table class="__table rowDataTable" data-table="'+ttable+'"><tr></tr></table>');
 		keys.map(allKeys=>{
   var class1 = '';
@@ -379,7 +405,7 @@ if(sortDBType[allKeys] == -1){
 
 })
 
-  $(table).find('tr').append('<th class="'+class2+'"><h4>'+allKeys+'</h4><div class="queryAction"><div class="__ib find"><span class="">&#9906;</span></div><div class="__ib sort '+class1+'"><span class="asc">&#8657;</span><span class="ascdesc">&#8661;</span><span class="desc">&#8659;</span></div></div></th>')
+  $(table).find('tr').append('<th class="'+class2+'"><h4 class="'+class1+'">'+allKeys+'</h4><div class="queryAction"><div class="__ib find" tooltip="Find In '+allKeys+'" flow="down"><span class="findIcon" >&#9906;</span></div><div class="__ib sort '+class1+'" ><span class="asc" tooltip="'+allKeys+' Order By Ascending" flow="down">&#8675;</span><span class="desc" tooltip="'+allKeys+' Order By Descending" flow="down">&#8673;</span></div></div></th>')
 
 
 
@@ -397,11 +423,11 @@ if(sortDBType[allKeys] == -1){
 				if(vkey == name){
         	if(value !== null && typeof value == 'object' && value.length !== undefined  && typeof value[0] == 'object'){
 
-        		$(table).find('[data-for="'+vkey+'"][data-row="'+i+'"]').html(json2Table(value))
+        		$(table).find('[data-for="'+vkey+'"][data-row="'+i+'"]').html(json2Table(value,_window))
 // $(table).find('[data-for='+vkey+'][data-row='+i+']').text('value')
 
 }else if (value !== null && value.length === undefined && typeof value == 'object') {
-  $(table).find('[data-for="'+vkey+'"][data-row="'+i+'"]').html(json2Table([value]))
+  $(table).find('[data-for="'+vkey+'"][data-row="'+i+'"]').html(json2Table([value],_window))
 
 
 
@@ -423,6 +449,16 @@ if(sortDBType[allKeys] == -1){
 	})
 
 
+  var tabArrayIndex = tabArrayWindowIndex(_window)
+  tabArray[tabArrayIndex].keys = [...new Set(keys.concat(tabArray[tabArrayIndex].keys))]
+
+  // tabArray[tabArrayIndex].resultData = resultData
+  console.log('ramramramramramram',tabArray )
+
+  // ram = keys
+  // console.log('kkkkkkkkkk',ram )
+  // console.log('ttablettablettable',ttable )
+
 	return table
 }
 
@@ -434,20 +470,31 @@ function addSortBy(){
 ////////////////////////////////////////////////////////////////////////////////////////
 
 function findBy(){
-	$('.find').click(function(){
-
-		$('#findModel,#modelBg').fadeIn()
-		$('#findValue').val('')
+	$('.find').click(function(e){
+    e.stopImmediatePropagation();
+    var _window = getWindow($(this),'c');
+    var selector = selectorWindow(_window, 'c')
+    var heading = $(this).closest('th').children('h4').text()
+    console.log('dd',heading)
+    selector.addClass('showFilter')
+    selector.find('.filterWindow .searchBy .current').text(heading)
+    // const json_getAllKeys = (tabArray[0].resultData) => (
+    //   tabArray[0].resultData.reduce((keys, obj) => (
+    //     keys.concat(Object.keys(obj).filter(key => (
+    //       keys.indexOf(key) === -1))
+    //     )
+    //   ), [])
+    // )
+// console.log('json_getAllKeys',json_getAllKeys)
+// 		$('#findModel,#modelBg').fadeIn()
+// 		$('#findValue').val('')
 		var key = $(this).parents('th').find('h4').text()
 		var paretskeyLength = $(this).parents('table').length
 		var  paretskey = [] ;
 		for (var i = 0; i < paretskeyLength-1; i++) {
 			paretskey.push($(this).parents('table').parent('td').eq(i).attr('data-for'))
 		}
-		// var paretskey = $(this).parents('table').parent('td').attr('data-for')
-
 		if(paretskeyLength > 1){
-			// key = paretskey+'.'+key
 			key = paretskey.join('.')+'.'+key
 		}
 
@@ -461,27 +508,30 @@ function findBy(){
 
 function findData(){
 
-	$('#findSearch').click(function(){
-		var key = $('#findModel .bKey').text()
-		var findType = $("input:radio[name=findType]:checked").val()
-		var findValue = $('#findValue').val()
-		findByDB = {}
-		if (findValue != null && findValue != '') {
-			findByDB = {key,findType,value:findValue}
-			$('.clearFilter').addClass('enable')
-  	loading('show','Data Loading... ')
-  	getDBData()
-// return false
-
-}else{
-  }
+	$('.findSearch').click(function(e){
+    e.stopImmediatePropagation()
+    var _window = getWindow($(this),'c')
+    var selector = selectorWindow(_window,'c')
+    var findInCollection = selector.find('.searchBy.actionBox .current').text();
+    var sortCollection = selector.find('.sortBy.actionBox [data-type=collection] .current').text();
+    var findValue = selector.find('.searchBy.actionBox .findBox .findValue').val();
+    var orderValue = selector.find('.sortBy.actionBox [data-type=order] .current').text();
+    var findType = selector.find('.searchBy.actionBox .findType input:radio[name=findType'+_window+']:checked').val()
+    var windowIndex = tabArrayWindowIndex(_window)
+    var dName = tabArray[windowIndex].did
+    var cName = tabArray[windowIndex].cid
+    var sort = {[sortCollection]:orderValue === 'ASC' ? 1 : -1}
+    var find  = findInCollection === 'N/A' || !findValue ? {} : {key:findInCollection,findType,value:findValue}
+    _getDBData(dName,cName,20,_window,sort,find)
 
 })
 
-	$('#modelBg,#findCancel').click(function(){
-		$('#findModel,#modelBg').fadeOut()
-
-	})
+	$('.findCancel').click(function(e){
+    e.stopImmediatePropagation()
+    var _window = getWindow($(this),'c')
+    var selector = selectorWindow(_window,'c')
+    selector.removeClass('showFilter')
+  })
 
 
 }
@@ -579,10 +629,7 @@ function jsonHTMLView(w){
        loader($('#headerContent .tab[data-tab='+_window+']'),'hide')
        if(resultData.Error === undefined){
          var dropDownDataIndex = dropDownData.findIndex((obj => obj.id == id));
-         var tabArrayIndex = tabArray.findIndex((obj => obj.windowId == _window));
          dropDownData[dropDownDataIndex].collections = resultData
-         // tabArray[tabArrayIndex].did = parseInt(id)
-         var dObj = dropDownData.find(value=> value.id === parseInt(id))
 }
 
       _collectionList(resultData,_window)
@@ -592,8 +639,10 @@ function jsonHTMLView(w){
   }
 
 
-  function _getDBData(dName,cName,limit,_window){
-    var data = {dName:dName,cName:cName,limit,sort:sortDBType,find:findByDB}
+  function _getDBData(dName,cName,limit,_window,sortDBType,findByDB){
+    var sort = sortDBType ? sortDBType : tabArray[tabArrayWindowIndex(_window)].sortDBType
+    var find = findByDB ? findByDB : tabArray[tabArrayWindowIndex(_window)].findByDB
+    var data = {dName:dName,cName:cName,limit,sort,find}
     var values = {  "for": "dbDocumentConnect", values : data}
     var selector = selectorWindow(_window,'c')
 
@@ -603,30 +652,34 @@ function jsonHTMLView(w){
 
 
     dbHTTP('post','/',JSON.stringify(values),function(resultData){
-
-      if(resultData.Error === undefined){
-        // var dropDownDataIndex = dropDownData.findIndex((obj => obj.id == dName));
-        var tabArrayIndex = tabArray.findIndex((obj => obj.windowId == _window));
-        // dropDownData[dropDownDataIndex].collections = resultData
+console.log('resultDataresultDataresultData',resultData.status)
+console.log('resultData.Error',resultData.Error)
+      if(resultData.Error === undefined && resultData.status === undefined){
+        var tabArrayIndex = tabArrayWindowIndex(_window)
         tabArray[tabArrayIndex].resultData = resultData
         tabArray[tabArrayIndex].did = parseInt(dName)
         tabArray[tabArrayIndex].cid = cName
+        tabArray[tabArrayIndex].sortDBType = sort
+        tabArray[tabArrayIndex].findByDB = find
+        tabArray[tabArrayIndex].limit = limit
+
         var dObj = dropDownData.find(value=> value.id === parseInt(dName))
         var dname = dObj.name
         $('#headerContent .tab[data-tab='+_window+']').find('.dname').text(dname)
         selectorWindow(_window,'t').find('.cname').text(cName)
-      }
-      loader($('#headerContent .tab[data-tab='+_window+']'),'hide')
 
-      dbloadData = resultData.data
-      selector.find('.dataInfo').remove()
-      selector.removeClass('gradientBG')
-      selector.prepend(`
+
+        dbloadData = resultData.data
+        selector.removeClass('showFilter')
+        selector.find('.dataInfo').remove()
+        selector.find('.filterWindow').remove()
+        selector.removeClass('gradientBG')
+        selector.prepend(`
 <div class="dataInfo">
 <div class="views dataInfoBox"><span class="title">Data Box View : </span>
 ${createSelect(dataPages)}
 </div>
-<div class="dataInfoBox"><span class="title">Filter : </span></div>
+<div class="dataInfoBox"><span class="title">Filter : ${Object.keys(tabArray[tabArrayIndex].sortDBType)[0]}</span><span class="filterIcon">&#9881;</span></div>
 <div class="dataInfoBox"> <span class="title">Pages : </span> <div class="__ib"><select>
             <option data-display-text="20">20</option>
             <option>50</option>
@@ -635,13 +688,20 @@ ${createSelect(dataPages)}
           </select></div></div>
           <div class="dataInfoBox" id="dddd"><span class="title">Data View : </span> ${createSelect(dataView)}</div>
            <div class="dataInfoBox"><span class="title">Total : </span><span class="infoTotal">${resultData.details.count}</span></div>
-</div>`)
-      selector.find('.dataBox').html(json2Table(resultData.data))
-      jsonHTMLView(resultData.data)
-      sortDoc()
-      findBy()
-      // customSelect()
-      create_custom_dropdowns()
+</div>
+<div class="filterWindow"></div>`)
+        selector.find('.dataBox').html(json2Table(resultData.data,_window))
+        jsonHTMLView(resultData.data)
+        sortDoc()
+        findBy()
+        // customSelect()
+        create_custom_dropdowns()
+        actionBox(_window,tabArray,tabArrayWindowIndex,sortType)
+
+      }
+      loader($('#headerContent .tab[data-tab='+_window+']'),'hide')
+
+
     })
   }
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -857,6 +917,7 @@ if(initial){
       'data-window' : windowNo,
       html : `<div class="dataBox"><div class="welcomeMessage">Online Mongo Database Management System</div>`
     }))
+    scroll(windowNo)
   }
 
 //////////////////////////////////////////////////////////////////////////////////////// v2
@@ -902,7 +963,10 @@ $('.content[data-window='+tabId+']').addClass('active')
         did:null,
         cid:null,
         windowId:tabArray.length+1,
-        dropDown:[]
+        dropDown:[],
+        sortDBType : {'_id':-1},
+        findByDB : {},
+        keys: []
       })
       buildTabs(false)
       // addBuildTab()
@@ -1029,12 +1093,94 @@ var value = _this.attr('data-value'),
     }
   }
 
+
+////////////////////////////////////////////////////////////////////////////////////////
   function tabArrayWindowIndex(windowId){
     var tabArrayIndex = tabArray.findIndex((obj => obj.windowId == windowId));
     return tabArrayIndex
   }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function createSelect(dataView) {
+    let s = $("<div><div class='__ib'><select /></div></div>");
+    dataView.map(function (v,i) {
+      var qqq
+      if(v.default ){
+        qqq = 'data-display-text="'+v.name+'"'
+      }else {
+        qqq = ''
+      }
+
+      $(s).find('select').append('<option value="'+v.class+'" '+qqq+' >'+v.name+'</option>')
+
+    })
+    return $(s).html();
+
+
+  }
+
+  function createCustomSelect(data,current){
+    console.log('datadatadatadatadata',data)
+    console.log('currentcurrentcurrent',current)
+    if(current == -1){
+      current = 'DESC'
+    }
+    if(current == 1){
+      current = 'ASC'
+    }
+
+
+    var select = $('<div><div class="__ib"><div class="dropdown"><span class="current">'+current+'</span><div class="list"><ul></ul></div></div></div></div>')
+    data.map(function (v) {
+      if(typeof v !== 'object'){
+        $(select).find('.list ul').append('<li class="option">'+v+'</li>')
+
+      }else {
+        $(select).find('.list ul').append('<li class="option" data-value='+v.value+' >'+v.name+'</li>')
+      }
+    })
+    return $(select).html()
+  }
+  function actionBox(_window) {
+    var tabArrayIndex = tabArrayWindowIndex(_window)
+    var sortKey = Object.keys(tabArray[tabArrayIndex].sortDBType)[0]
+    var orderBy = tabArray[tabArrayIndex].sortDBType[sortKey]
+    console.log('sortKeysortKeysortKey',sortKey)
+    console.log('orderByorderByorderBy',orderBy)
+    selectorWindow(_window,'c').find('.filterWindow').append(`
+<div class="__ib actionBox searchBy"><span class="title"> Find In : ${createCustomSelect(tabArray[tabArrayIndex].keys,'N/A')}</span>
+<div class="findBox __ib ">
+      <div class=" findType">
+        <div class="__ib"><input type="radio" name="findType${_window}" value="String" id="String${_window}" checked=""><label for="String${_window}">String</label></div><div class="__ib"><input type="radio" name="findType${_window}" id="ID${_window}" value="ID"><label for="ID${_window}">ID</label></div><div class="__ib"><input type="radio" name="findType${_window}" id="Number${_window}" value="Number"><label for="Number${_window}">Number</label></div>
+      </div>
+      <input type="text" name="findValue" class="findValue"  placeholder="Type Value here">
+
+   </div>
+</div><div class="__ib actionBox sortBy"><span class="title" data-type="collection"> Sort By : ${createCustomSelect(tabArray[tabArrayIndex].keys, sortKey)} </span><span  data-type="order"> ${createCustomSelect(sortType,orderBy)} </span></div>
+<div align="right" class="iconBox __ib"><span class="__ib icon findSearch">✔</span><span class="__ib icon findCancel">✘</span></div>
+`)
+    findData()
+    console.log('tabArraytabArraytabArray',tabArray)
+  }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  function scroll(_window){
+    $('.dataBox').scroll(function(e) {
+      e.stopImmediatePropagation();
+
+      // console.log('sccrlll',$(this).scrollTop())
+      console.log('_window_window',_window)
+      if ($(this).scrollTop() > 30) {
+        var _window = getWindow($(this),'c')
+        var selector = selectorWindow(_window,'c')
+        selector.removeClass('showFilter')
+      }
+      else {
+        // $('#scrollDiv').fadeOut('slow');
+      }
+    });
+  }
 ////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 
@@ -1047,7 +1193,7 @@ $(document).ready(function () {
 	getCollection()
 	addSortBy()
 	clearFilter()
-	findData()
+	// findData()
     renderDBList(baseData)
   // createContentBox()
   bodyFunc()

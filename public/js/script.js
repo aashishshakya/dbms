@@ -30,25 +30,7 @@ var dataPages = [{
     default: false,
     class: 'squareView'
   }]
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  function createSelect(dataView) {
-    let s = $("<div><div class='__ib'><select /></div></div>");
-    dataView.map(function (v,i) {
-      var qqq
-      if(v.default ){
-         qqq = 'data-display-text="'+v.name+'"'
-      }else {
-        qqq = ''
-      }
 
-      $(s).find('select').append('<option value="'+v.class+'" '+qqq+' >'+v.name+'</option>')
-
-    })
-    return $(s).html();
-
-
-  }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function arrayView(_window,w) {
   var selector = selectorWindow(_window,'c')
   selector.find('.dataBox').empty()
@@ -112,7 +94,6 @@ function json2DView(json) {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
