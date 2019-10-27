@@ -13,10 +13,11 @@ var backup = require('mongodb-backup');
 
 
 
+// console.log('ddddd',window.atob('hareRAM'))
 
-
-
-
+// console.log(Buffer.from('Hello World!').toString('base64'));
+// console.log(Buffer.from('SGVsbG8gV29ybGQhSGVsbG87Jy8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG87Jy8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQhSGVsbG8gV29ybGQh', 'base64').toString());
+//
 
 async function  dbAdd(values){
 	dbsName.dbs.push(values)
@@ -32,7 +33,37 @@ async function  dbAdd(values){
 	});
 }
 
+async function connectDb_V2 (v,res) {
 
+      // console.log('bhaskar',dbName)
+      console.log('v.collection',v)
+
+      await mongoose.connect('mongodb://'+v.uri+v.collection,{ useNewUrlParser: true },(error)=>{
+        if (!error) {
+          console.log('MongoDB Connection Succeeded.')
+        }
+        else {
+          console.log('Error in DB connection : ' + error)
+          res.send({'Error': error})
+        }
+      });
+      await mongoose.connection.db.listCollections().toArray(async function (err, names) {
+        console.log('names',names)
+        if(err){
+          res.send({'Error': err})
+        }else{
+          res.send(names)
+
+        }
+
+      })
+      mongoose.connection.close()
+
+
+
+
+
+}
 function connectDb1 (dbId,res) {
 
 	dbsName.dbs.map(async function(v){
@@ -232,91 +263,176 @@ backup({
 
 
 
+async function dbDocumentConnect_V2(values,res){
+  var cName = values.cName, dName = values.dName, limit = values.limit, sort = values.sort, find = values.find, findSearch = {}
+
+  if (limit < 1 || limit > 200 || limit == undefined || limit == null) {
+    limit = 20
+  }
+
+
+  if(typeof find.value === 'string' && typeof find == 'object' && find.findType == 'String'){
+    findSearch = {[find.key]: new RegExp('^' + find.value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '$', 'i')}
+// findSearch = {[find.key]: new RegExp(find.value, 'i')}
+
+    if(find.value == 'false' || find.value == 'true'){
+      findSearch = {[find.key]: JSON.parse(find.value)}
+
+    }
+
+  }
+  if(find.findType == 'ID'){
+    findSearch = {[find.key]: mongoose.Types.ObjectId(find.value)}
+
+  }if(find.findType == 'Number'){
+    findSearch = {[find.key]: parseInt(find.value)}
+
+  }
+
+
+  if(cName != undefined && dName != undefined){
+
+
+        var con = mongoose.createConnection();
+        var connecting = function(err){
+          console.log("Please Wait connecting \t"+con.readyState);
+        };
+        var disconnecting = function(err){
+          console.log("Please Wait Disconnecting \t"+con.readyState);
+        };
+        var connected = function(err){
+          console.log("Connection Connected\t"+con.readyState);
+        };
+        var disconnected= function(err){
+          console.log("Connection DisConnected \t"+con.readyState);
+        };
+
+        console.log('yyyyyyyyyyy',findSearch)
+        con.on("connecting",connecting);
+        con.on("disconnecting",disconnecting);
+        con.on("connected",connected);
+        con.on("disconnected",disconnected);
+        con.openUri('mongodb://'+values.uri+values.collection,{ useNewUrlParser: true });
+
+
+
+        const dummySchema = await new mongoose.Schema({
+          // createdBy: String,
+          // subject: String
+        },{collection: cName});
+
+        const MyModel = con.model(cName, dummySchema);
+        let records = {data:'',details:{}}
+        await MyModel.count(findSearch, function (err, count) {
+          // console.log('llllllllllllllllllll',docs)
+          records.details = {count:count}
+          console.log('ppppppppppppppppppppppppppppppppppppppppppppppp',count)
+          // res.send(docs)
+          // con.connection.close()
+
+        }).sort(sort).explain().then(console.log);
+
+        await MyModel.find(findSearch, function (err, docs) {
+          // console.log('llllllllllllllllllll',docs)
+          // console.log('errerrerr',err)
+          records.data = docs
+          res.send(records)
+          // con.connection.close()
+
+        }).sort(sort).limit(limit)
+        // .explain().then(console.log);
+
+
+
+  }
+
+}
 function dbDocumentConnect2(values,res){
-var cName = values.cName, dName = values.dName, limit = values.limit, sort = values.sort, find = values.find, findSearch = {}
+  var cName = values.cName, dName = values.dName, limit = values.limit, sort = values.sort, find = values.find, findSearch = {}
 
-if (limit < 20 || limit == undefined || limit == null) {
-	limit = 20
-}
-
-
-if(typeof find.value === 'string' && typeof find == 'object' && find.findType == 'String'){
-findSearch = {[find.key]: new RegExp(find.value, 'i')}
-
-if(find.value == 'false' || find.value == 'true'){
-findSearch = {[find.key]: JSON.parse(find.value)}
-
-}
-
-}
-if(find.findType == 'ID'){
-findSearch = {[find.key]: mongoose.Types.ObjectId(find.value)}
-
-}if(find.findType == 'Number'){
-findSearch = {[find.key]: parseInt(find.value)}
-
-}
+  if (limit < 1 || limit > 200 || limit == undefined || limit == null) {
+    limit = 20
+  }
 
 
-	if(cName != undefined && dName != undefined){
+  if(typeof find.value === 'string' && typeof find == 'object' && find.findType == 'String'){
+    findSearch = {[find.key]: new RegExp('^' + find.value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '$', 'i')}
+// findSearch = {[find.key]: new RegExp(find.value, 'i')}
 
-dbsName.dbs.map(async function(v){
+    if(find.value == 'false' || find.value == 'true'){
+      findSearch = {[find.key]: JSON.parse(find.value)}
 
-		if(v.id == dName){
-var con = mongoose.createConnection();
-var connecting = function(err){
-console.log("Please Wait connecting \t"+con.readyState);
-};
-var disconnecting = function(err){
-console.log("Please Wait Disconnecting \t"+con.readyState);
-};
-var connected = function(err){
-console.log("Connection Connected\t"+con.readyState);
-};
-var disconnected= function(err){
-console.log("Connection DisConnected \t"+con.readyState);
-};
+    }
 
-console.log('yyyyyyyyyyy',findSearch)
-con.on("connecting",connecting);
-con.on("disconnecting",disconnecting);
-con.on("connected",connected);
-con.on("disconnected",disconnected);
-con.openUri('mongodb://'+v.uri+v.collection,{ useNewUrlParser: true });
+  }
+  if(find.findType == 'ID'){
+    findSearch = {[find.key]: mongoose.Types.ObjectId(find.value)}
+
+  }if(find.findType == 'Number'){
+    findSearch = {[find.key]: parseInt(find.value)}
+
+  }
 
 
+  if(cName != undefined && dName != undefined){
 
-const dummySchema = await new mongoose.Schema({
-  // createdBy: String,
-  // subject: String
-},{collection: cName});
+    dbsName.dbs.map(async function(v){
 
-			const MyModel = con.model(cName, dummySchema);
-			let records = {data:'',details:{}}
-			await MyModel.count(findSearch, function (err, count) {
-				// console.log('llllllllllllllllllll',docs)
-				records.details = {count:count}
-				console.log('ppppppppppppppppppppppppppppppppppppppppppppppp',count)
-				// res.send(docs)
-				// con.connection.close()
+      if(v.id == dName){
+        var con = mongoose.createConnection();
+        var connecting = function(err){
+          console.log("Please Wait connecting \t"+con.readyState);
+        };
+        var disconnecting = function(err){
+          console.log("Please Wait Disconnecting \t"+con.readyState);
+        };
+        var connected = function(err){
+          console.log("Connection Connected\t"+con.readyState);
+        };
+        var disconnected= function(err){
+          console.log("Connection DisConnected \t"+con.readyState);
+        };
 
-			}).sort(sort).explain().then(console.log);
-
-			await MyModel.find(findSearch, function (err, docs) {
-				// console.log('llllllllllllllllllll',docs)
-				// console.log('errerrerr',err)
-				records.data = docs
-				res.send(records)
-				// con.connection.close()
-
-			}).sort(sort).limit(limit)
-			// .explain().then(console.log);
+        console.log('yyyyyyyyyyy',findSearch)
+        con.on("connecting",connecting);
+        con.on("disconnecting",disconnecting);
+        con.on("connected",connected);
+        con.on("disconnected",disconnected);
+        con.openUri('mongodb://'+v.uri+v.collection,{ useNewUrlParser: true });
 
 
 
-	}
-})
-}
+        const dummySchema = await new mongoose.Schema({
+          // createdBy: String,
+          // subject: String
+        },{collection: cName});
+
+        const MyModel = con.model(cName, dummySchema);
+        let records = {data:'',details:{}}
+        await MyModel.count(findSearch, function (err, count) {
+          // console.log('llllllllllllllllllll',docs)
+          records.details = {count:count}
+          console.log('ppppppppppppppppppppppppppppppppppppppppppppppp',count)
+          // res.send(docs)
+          // con.connection.close()
+
+        }).sort(sort).explain().then(console.log);
+
+        await MyModel.find(findSearch, function (err, docs) {
+          // console.log('llllllllllllllllllll',docs)
+          // console.log('errerrerr',err)
+          records.data = docs
+          res.send(records)
+          // con.connection.close()
+
+        }).sort(sort).limit(limit)
+        // .explain().then(console.log);
+
+
+
+      }
+    })
+  }
 
 }
 
@@ -372,7 +488,8 @@ await fs.writeFile('db.json', JSON.stringify(dbsName,null,2), function (err) {
 if(reqFor == 'dbConnect'){
 
 	
-	connectDb1 (values.id, res)
+	// connectDb1 (values.id, res)
+  connectDb_V2(values, res)
 		// res.send({message : "connect"})
 		
 
@@ -384,7 +501,8 @@ if(reqFor == 'dbConnect'){
 // 	dbBackup(values, res)
 
 
-	dbDocumentConnect2 (values,  res)
+	dbDocumentConnect_V2 (values,  res)
+	// dbDocumentConnect2 (values,  res)
 
 	}
 	if(reqFor == 'getCollection'){
