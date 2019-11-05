@@ -34,6 +34,7 @@ var dataPages = [{
 function arrayView(_window,w) {
   var selector = selectorWindow(_window,'c')
   selector.find('.dataBox').empty()
+  selector.find('.dataBox').append('<div><span>Clear All</span><span>Clear </span></div>')
   selector.find('.dataBox').html(json2DView(w))
 }
 function jsonView(_window,w) {
@@ -77,7 +78,7 @@ function json2DView(json) {
     })
     return html
   }
-  var html = $('<ul class="__objectUl"></ul>'), li;
+  var html = $('<ul class="__objectUl"><i class="jsonUlAction"></i></ul>'), li;
   // for( i in json) {
   $.each(json, function(key,value){
     li = html.append('<li><span class="key __ib __va-t">'+key+'</span> <span class="colun __ib __va-t">:</span> <span class="value __ib __va-t"></span></li>')

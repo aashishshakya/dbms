@@ -5,8 +5,16 @@
 // __ac = dbconnection fun
 // __ad dbEdit f
 // __ae dbAdd f
-  const getItemsLocal = JSON.parse(localStorage.getItem('items'))
-  const getItemsSession = JSON.parse(sessionStorage.getItem('items'))
+//   console.log('localStorage.getItem()',localStorage.getItem('items'))
+//   console.log('localStorage.getItem()2',crypt(localStorage.getItem('items'),'d'))
+//   console.log('localStorage.getItem()3',JSON.parse(crypt(localStorage.getItem('items'),'d')))
+//   console.log('11111',storageItems('local','get'))
+//   console.log('11111',storageItems('session','get'))
+
+  // const getItemsLocal = JSON.parse(localStorage.getItem('items'))
+  const getItemsLocal = storageItems('local','get')
+  // const getItemsSession = JSON.parse(sessionStorage.getItem('items'))
+  const getItemsSession = storageItems('session','get')
 
   let itemsLocalArray = getItemsLocal ? getItemsLocal : [];
   let itemsSessionArray = getItemsSession ? getItemsSession : [];
@@ -19,6 +27,7 @@
     {heading:'URI',editable:true},
     {heading:'Collection',editable:true},
     {heading:'Web Storage',editable:true},
+    {heading:'Status',editable:false},
     {heading:'Action',editable:false},
   ]
 
@@ -91,7 +100,7 @@ function __ab(baseData){
 		var newBaseData = baseData.slice();
 
 		newBaseData.push(myElement)
-		__aa(newBaseData,'add')
+		// __aa(newBaseData,'add')
 // if (tt == 'add'){
 
 // tt = ''
@@ -162,7 +171,7 @@ function __ae(){
 			if(values){
 				dbHTTP('post','/',JSON.stringify(values),function(data){
 
-					__aa(JSON.parse(data.data))
+					// __aa(JSON.parse(data.data))
 					// location.reload();
 				})
 			}
@@ -180,7 +189,7 @@ function btnCancel(){
 // $(this).parents('table').removeClass('activeEditTable')
 // $(this).text('Connect').removeClass('btnCancel')
 // $(this).prev('button').text('Edit').removeClass('dbUpdate').addClass('editDB')
-__aa(baseData)
+// __aa(baseData)
 
 })
 
@@ -364,7 +373,7 @@ function sortDoc(){
       sortKey = paretskey.join('.')+'.'+sortKey
     }
     // _getDBData(dName,cName,20,_window,sortDBType,find)
-    console.log('className', $(this).attr('class'))
+    // console.log('className', $(this).attr('class'))
 // return false
 		if($(this).hasClass('desc')){
 			$(this).parent().removeClass('desc')
@@ -420,15 +429,15 @@ sortDBType = {[sortKey]:sortValue}
     $('body .dbModal').remove()
       $('body').append(`<div class="dbModal"><h3 class="heading">Your Data Base Details</h3> <span class="closeModel">X</span><div class="dbTable"><table class="__table"><thead><tr></tr></thead><tbody></tbody></table></div><span class="addDBRow _btn">Add Row</span></div>`)
       dbTableHeading.map(function (v,i) {
-        $('.dbModal .__table thead').append('<th>'+v.heading+'</th>')
+        $('.dbModal .__table thead tr').append('<th>'+v.heading+'</th>')
       })
       itemsNoArray.concat(itemsSessionArray, itemsLocalArray).map(function (v,i) {
-        $('.dbModal .__table tbody').prepend('<tr data-for="'+v.id+'"><td>'+v.name+'</td><td>'+v.uri+'</td><td>'+v.collection+'</td><td>'+v.storageFor+'</td><td><span class="editDbDetail _btn">Edit</span></td></tr>')
+        $('.dbModal .__table tbody').prepend('<tr data-for="'+v.id+'"><td>'+v.name+'</td><td>'+v.uri+'</td><td>'+v.collection+'</td><td>'+v.storageFor+'</td><td><span class="CheckStatus link"></span></td><td><span class="editDbDetail _btn">Edit</span></td></tr>')
 
       })
       addDBRow()
       editDbDetail()
-
+      checkStatus()
       $('.closeModel').click(function (e) {
         e.stopImmediatePropagation();
         $('#modelBg').hide()
@@ -450,6 +459,10 @@ sortDBType = {[sortKey]:sortValue}
         dbTableHeading.map(function (v,i) {
           if(v.heading === 'Web Storage'){
             $('.dbModal .__table tbody tr').first().append('<td data-for="storage">'+createCustomSelect(_storage,_storage[1])+'</td>')
+            return false
+          }
+          if(v.heading === 'Status'){
+            $('.dbModal .__table tbody tr').first().append('<td data-for="CHECK" width="50"><span class="CheckStatus link"></span></td>')
             return false
           }
           if(v.heading === 'Action'){
@@ -474,21 +487,22 @@ sortDBType = {[sortKey]:sortValue}
         var found = items.find(function(e) {
           return e.id === id;
         });
-        console.log('items',items)
-        console.log('found',found)
+        // console.log('items',items)
+        // console.log('found',found)
         $(this).closest('tr').after(`<tr data-for="${found.id}" >
 <td data-for="Name"><textarea placeholder="Name*" value="">${found.name}</textarea></td>
 <td  data-for="URI"><textarea placeholder="URI*" value="">${found.uri}</textarea></td>
 <td data-for="Collection"><textarea placeholder="Collection*" value="">${found.collection}</textarea></td>
 <td  data-for="storage" >${createCustomSelect(_storage,found.storageFor)}</td>
+<td  data-for="status" ><span class="CheckStatus link"></span></td>
 <td><span class="saveDbDetail _btn">Update</span><span class="cancelDbDetail _btn">Cancel</span></td>
 </tr>`)
         var removeData =  $(this).closest('tr[data-for='+found.id+']').detach()
         saveDbDetails()
 
-        console.log('items',items);
-        console.log('id',typeof id);
-        console.log('found',found);
+        // console.log('items',items);
+        // console.log('id',typeof id);
+        // console.log('found',found);
 
         // alert(id)
 return false
@@ -498,6 +512,10 @@ return false
         dbTableHeading.map(function (v,i) {
           if(v.heading === 'Web Storage'){
             $('.dbModal .__table tbody tr').first().append('<td data-for="storage">'+createCustomSelect(_storage,_storage[1])+'</td>')
+            return false
+          }
+          if(v.heading === 'Status'){
+            $('.dbModal .__table tbody tr').first().append('<td data-for="CHECK" width="50"><span>Check Status</span></td>')
             return false
           }
           if(v.heading === 'Action'){
@@ -513,8 +531,35 @@ return false
         // addDBRow()
         // editDbDetail()
       })
-    }
 
+    }
+function checkStatus() {
+
+  $('.dbModal').on('click','.CheckStatus',async function (e) {
+    e.stopImmediatePropagation();
+    var id = $(this).closest('tr').attr('data-for')
+    var data = '';
+    var th = $(this)
+    if($(this).hasClass('link')){
+      loader($(this), 'show')
+      $(this).removeClass('link')
+      data = await _getCollection(id)
+      loader($(this), 'hide')
+      console.log(data)
+      if(data === 'error'){
+        $(this).addClass('wrong')
+        setTimeout(function () {
+          th.removeClass('wrong').addClass('link')
+        },2000)
+      }else {
+        $(this).addClass('right')
+        setTimeout(function () {
+          th.removeClass('right').addClass('link')
+        },2000)
+      }
+    }
+  })
+}
 
     
     function saveDbDetails() {
@@ -537,13 +582,15 @@ return false
           alert('Value Can not be blank.')
           return false
         }
-        console.log('name',name)
-        console.log('collection',collection)
-        console.log('uri',uri)
-        console.log('storage',storageFor)
+        // console.log('name',name)
+        // console.log('collection',collection)
+        // console.log('uri',uri)
+        // console.log('storage',storageFor)
 
-        var ls = JSON.parse(localStorage.getItem('items'))
-        var ss = JSON.parse(sessionStorage.getItem('items'))
+        // var ls = JSON.parse(localStorage.getItem('items'))
+        // var ss = JSON.parse(sessionStorage.getItem('items'))
+        var ls = storageItems('local','get')
+        var ss = storageItems('session','get')
         var new_itemsLocalArray = (ls?ls:[]).filter(function (e) {
           return e.id !== id
         })
@@ -557,27 +604,34 @@ return false
         itemsSessionArray = new_itemsSessionArray
         itemsLocalArray = new_itemsLocalArray
         itemsNoArray = new_itemsNoArray
-
         if(storageFor === _storage[0]){
           itemsNoArray.push(dbJson)
-          sessionStorage.setItem('items', JSON.stringify(itemsSessionArray))
-          localStorage.setItem('items', JSON.stringify(itemsLocalArray))
+          // sessionStorage.setItem('items', JSON.stringify(itemsSessionArray))
+          // localStorage.setItem('items', JSON.stringify(itemsLocalArray))
         }
         if(storageFor === _storage[1]){
 
 
           // itemsSessionArray.push(dbJson)
-          sessionStorage.setItem('items', JSON.stringify(itemsSessionArray))
+          // sessionStorage.setItem('items', JSON.stringify(itemsSessionArray))
           itemsLocalArray.push(dbJson)
-          localStorage.setItem('items', JSON.stringify(itemsLocalArray))
+          // localStorage.setItem('items', JSON.stringify(itemsLocalArray))
         }
         if(storageFor === _storage[2]){
           // itemsLocalArray = new_itemsLocalArray
-          localStorage.setItem('items', JSON.stringify(itemsLocalArray))
+          // localStorage.setItem('items', JSON.stringify(itemsLocalArray))
           // itemsSessionArray = new_itemsSessionArray
           itemsSessionArray.push(dbJson)
-          sessionStorage.setItem('items', JSON.stringify(itemsSessionArray))
+          // sessionStorage.setItem('items', JSON.stringify(itemsSessionArray))
         }
+
+        // console.log('new_itemsLocalArrayyyyy',new_itemsLocalArray)
+        // console.log('new_itemsLocalArrayyyyy',crypt(JSON.stringify(new_itemsLocalArray),'e'))
+        // console.log('ddddd',crypt(crypt(JSON.stringify(new_itemsLocalArray),'e'),'d'))
+        // sessionStorage.setItem('items', crypt(JSON.stringify(itemsSessionArray),'e'))
+        // localStorage.setItem('items', crypt(JSON.stringify(itemsLocalArray),'e'))
+        storageItems('local','set',itemsLocalArray)
+        storageItems('session','set',itemsSessionArray)
         dropDownData = concatItemsData()
         mappingRowDbs()
       })
@@ -695,7 +749,7 @@ if(sortDBType[allKeys] == -1){
   tabArray[tabArrayIndex].keys = [...new Set(keys.concat(tabArray[tabArrayIndex].keys))]
 
   // tabArray[tabArrayIndex].resultData = resultData
-  console.log('ramramramramramram',tabArray )
+  // console.log('ramramramramramram',tabArray )
 
   // ram = keys
   // console.log('kkkkkkkkkk',ram )
@@ -744,7 +798,7 @@ $(this).toggleClass('active')
 		}
     selector.find('.filterWindow .searchBy .current').text(key)
 
-    console.log('keykeykey',key)
+    // console.log('keykeykey',key)
 		// $('#findModel h3').html('Find in <b class="bKey">'+key+'</b> Column')
 
 	})
@@ -845,7 +899,7 @@ function jsonHTMLView(w){
       <div class="navCollectionBox"></div>
       <div class="navFooter"><span class="download">Download</span></div></div><div class="dataInfo"><span class="infoTotal">Total : 12231</span></div><div class="dataBox"></div>`
   }))
-    $('#headerContent ul.windowTabUl').append('<li class="tab'+windowNo+'" data-tab="'+windowNo+'"><div class="dname">********</div><hr><div class="cname">*********</div></li><li class="addTab">+</li>')
+    $('#headerContent ul.windowTabUl').append('<li class="tab'+windowNo+'" data-tab="'+windowNo+'"><div class="dname">********</div><hr><div class="cname">*********</div></li><li class="addTab" >+</li>')
     renderDBList(baseData)
     liDBSelect()
     // stayRightBox()
@@ -869,29 +923,52 @@ function jsonHTMLView(w){
   }
 //////////////////////////////////////////////////////////////////////////////////////// we are using v2
    async function _getCollection(id,_window){
+  var result = 'error' ;
 var items = concatItemsData()
     var selectedData =  items.find(function (e) {
        return e.id === id
      })
-     console.log('itemssss',items)
-     console.log('id',id)
-     console.log('id',selectedData)
+     if(!_window && !selectedData){
+       var name = $('.dbTable td[data-for=Name] textarea').val()
+       var collection = $('.dbTable td[data-for=URI] textarea').val()
+       var uri = $('.dbTable td[data-for=Collection] textarea').val()
+       console.log(name,collection,uri)
+
+       if(name && collection && uri){
+         selectedData = {name,collection,uri}
+         // selectedData = {name,collection,uri}
+
+       }else{
+         alert('Please Fill The Value.')
+         return false
+       }
+     }
+     // console.log('itemssss',items)
+     // console.log('id',id)
+     // console.log('id',selectedData)
     var data = {id}
     var values ;
       values = {	"for": "dbConnect",	values : selectedData}
      loader($('#headerContent .tab[data-tab='+_window+']'),'show')
      $('#headerContent .tab[data-tab='+_window+']').removeClass('dpshow')
-     await dbHTTP('post','/',JSON.stringify(values),function(resultData){
+     var strValues = JSON.stringify(values)
+     var sendValues = crypt(strValues,'e')
+     console.log('sendValues',sendValues)
+     console.log('sendValuesttt', values)
+     await dbHTTP('post','/',JSON.stringify({e:sendValues}),function(resultData){
        loader($('#headerContent .tab[data-tab='+_window+']'),'hide')
        if(resultData.Error === undefined){
          var dropDownDataIndex = dropDownData.findIndex((obj => obj.id == id));
          dropDownData[dropDownDataIndex].collections = resultData
-}
+         result = resultData
+       }
 
+       // console.log('resultData',resultData)
       _collectionList(resultData,_window)
        $('#headerContent .tab[data-tab='+_window+']').addClass('dpshow')
       // $('.window'+_window+'[data-window='+_window+']').find('.navHeading').removeClass('active')
     })
+     return result
   }
 
 
@@ -910,11 +987,12 @@ dataLoader(_window,'show')
     loader($('#headerContent .tab[data-tab='+_window+']'),'show')
     $('#headerContent .tab[data-tab='+_window+']').removeClass('dpshow')
 
+    var strValues = JSON.stringify(values)
+    var sendValues = crypt(strValues,'e')
+    dbHTTP('post','/',JSON.stringify({e:sendValues}),function(resultData){
 
-    dbHTTP('post','/',JSON.stringify(values),function(resultData){
-
-      console.log('resultDataresultDataresultData',resultData.status)
-console.log('resultData.Error',resultData.Error)
+      // console.log('resultDataresultDataresultData',resultData.status)
+// console.log('resultData.Error',resultData.Error)
       if(resultData.Error === undefined && resultData.status === undefined){
         var tabArrayIndex = tabArrayWindowIndex(_window)
         tabArray[tabArrayIndex].resultData = resultData
@@ -1160,11 +1238,11 @@ if(initial){
     // $('#headerContent ul.windowTabUl').append('<li class="tab'+windowNo+'" data-tab="'+windowNo+'"><div class="dname">********</div><hr><div class="cname">*********</div></li><li class="addTab">+</li>')
   }
   function defaultDropdown(){
-    let defaultDropdown =  baseData.map(function (v) {
-      return {id:v.id, name:v.name, tag:v.for, collections:[]}
-    })
-    console.log('defaultDropdown',defaultDropdown)
-    console.log('itemsArray',itemsArray)
+    // let defaultDropdown =  baseData.map(function (v) {
+    //   return {id:v.id, name:v.name, tag:v.for, collections:[]}
+    // })
+    // console.log('defaultDropdown',defaultDropdown)
+    // console.log('itemsArray',itemsArray)
 
     dropDownData = itemsArray
     // dropDownData = defaultDropdown  //old
@@ -1219,6 +1297,11 @@ $('.content[data-window='+tabId+']').addClass('active')
   function addTab(){
     $('.addTab').click(function(e){
       e.stopPropagation();
+      console.log('tabArray',tabArray.length)
+      if(tabArray.length >= 4 ){
+        // $('#headerContent .addTab').addClass('disabled')
+        return false
+      }
       tabArray.push({
         active:true,
         did:null,
@@ -1230,6 +1313,10 @@ $('.content[data-window='+tabId+']').addClass('active')
         keys: [],
         limit:20,
       })
+      if(tabArray.length >= 4 ){
+        $('#headerContent .addTab').addClass('disabled')
+        // return false
+      }
       buildTabs(false)
       // addBuildTab()
     })
@@ -1260,7 +1347,7 @@ $(this).closest('.rangeBox').find('.rangeValue').text(value)
 // Open/close
   $(document).on('click', '.dropdown', function(event) {
     event.stopImmediatePropagation();
-    console.log('thiddropdown',$(this))
+    // console.log('thiddropdown',$(this))
     $('.dropdown').not($(this)).removeClass('open');
     $(this).toggleClass('open');
     if ($(this).hasClass('open')) {
@@ -1292,7 +1379,7 @@ $(this).closest('.rangeBox').find('.rangeValue').text(value)
   $(document).on('click', '.dropdown .option', function(event) {
     event.stopImmediatePropagation();
     $( ".option" ).dblclick();
-    console.log('iclickoption',$(this))
+    // console.log('iclickoption',$(this))
 
     const _window = getWindow($(this),'c')
     $(this).closest('.list').find('.selected').removeClass('selected');
@@ -1351,10 +1438,10 @@ $(this).closest('.rangeBox').find('.rangeValue').text(value)
     if(!_window){
       return false
     }
-    console.log('_window',_window)
+    // console.log('_window',_window)
 var value = _this.attr('data-value'),
   resultData = tabArray[tabArrayWindowIndex(_window)].resultData.data
-    console.log('vavvvvvvvv',value)
+    // console.log('vavvvvvvvv',value)
     if(value === 'jsonView'){
       jsonView(_window,resultData)
     }
@@ -1433,8 +1520,8 @@ var value = _this.attr('data-value'),
     var tabArrayIndex = tabArrayWindowIndex(_window)
     var sortKey = Object.keys(tabArray[tabArrayIndex].sortDBType)[0]
     var orderBy = tabArray[tabArrayIndex].sortDBType[sortKey]
-    console.log('sortKeysortKeysortKey',sortKey)
-    console.log('orderByorderByorderBy',orderBy)
+    // console.log('sortKeysortKeysortKey',sortKey)
+    // console.log('orderByorderByorderBy',orderBy)
     selectorWindow(_window,'c').find('.filterWindow').append(`
 <div class="__ib actionBox searchBy"><span class="title"> Find In : ${createCustomSelect(tabArray[tabArrayIndex].keys,'N/A')}</span>
 <div class="findBox __ib ">
@@ -1450,15 +1537,15 @@ var value = _this.attr('data-value'),
 <div align="right" class="iconBox __ib"><span class="__ib icon findSearch">✔</span><span class="__ib icon findCancel">✘</span></div>
 `)
     findData()
-    console.log('tabArraytabArraytabArray',tabArray)
+    // console.log('tabArraytabArraytabArray',tabArray)
   }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
   function scroll(_window){
     $('.dataBox').scroll(function(e) {
       e.stopImmediatePropagation();
 
-      // console.log('sccrlll',$(this).scrollTop())
-      console.log('_window_window',_window)
+      // // console.log('sccrlll',$(this).scrollTop())
+      // console.log('_window_window',_window)
       if ($(this).scrollTop() > 30) {
         var _window = getWindow($(this),'c')
         var selector = selectorWindow(_window,'c')
@@ -1472,24 +1559,77 @@ var value = _this.attr('data-value'),
   }
 ////////////////////////////////////////////////////////////////////////////////////////
   function concatItemsData(){
-    const getItemsLocal = JSON.parse(localStorage.getItem('items'))
-    const getItemsSession = JSON.parse(sessionStorage.getItem('items'))
+    // console.log('localStorage.getItem()',localStorage.getItem('items'))
+    // const getItemsLocal = JSON.parse(localStorage.getItem('items'))
+    // const getItemsSession = JSON.parse(sessionStorage.getItem('items'))
+    const getItemsLocal = storageItems('local','get')
+    const getItemsSession = storageItems('session','get')
 
     let itemsLocalArray = getItemsLocal ? getItemsLocal : [];
     let itemsSessionArray = getItemsSession ? getItemsSession : [];
-    let itemsNoArray = [];
+    // let itemsNoArray = [];
     return itemsNoArray.concat(itemsSessionArray, itemsLocalArray);
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////
+  function crypt(str,type){
+    var string = str
+    switch(type) {
+      case 'e':
+        string = window.btoa(str)
+        break;
+      case 'd':
+        string = window.atob(str);
+        break;
+      default:
+        string = str
+    }
+    return string
+  }
+
+  function storageItems(storage,type,data){
+    let localGetItem = localStorage.getItem('items')
+    let sessionGetItem = sessionStorage.getItem('items')
+    const _localItemArray = localGetItem ? crypt(localGetItem,'d') : '[]'
+    const _sessionItemArray = sessionGetItem ? crypt(sessionGetItem,'d') : '[]'
+    console.log('storage',storage)
+    console.log('type',type)
+    console.log('data',data)
+    console.log('_localItemArray',_localItemArray)
+    console.log('_sessionItemArray',data)
+    console.log('localGetItem ? crypt(localGetItem',localGetItem ? crypt(localGetItem,'d') : [])
+    if(storage === 'local' && type === 'get'){
+     return  JSON.parse(_localItemArray)
+    }
+    if(storage === 'session' && type === 'get'){
+      return  JSON.parse(_sessionItemArray)
+    }
+    if(storage === 'local' && type === 'set'){
+      return localStorage.setItem('items', crypt(JSON.stringify(data),'e'))
+    }
+    if(storage === 'session' && type === 'set'){
+      return sessionStorage.setItem('items', crypt(JSON.stringify(data),'e'))
+    }
+  }
+  /////////////////////////////////////////////////////////////////////////////////////
+  function jsonUlAction(){
+    $('body').on('click dblclick','.jsonUlAction, .__objectUl li:nth-child(2)',function () {
+$(this).closest('.__objectUl').toggleClass('close')
+    })
+    $('body').on('dblclick','.jsonUlAction, .__objectUl li:nth-child(2)',function () {
+      $(this).closest('.__arrayUl').find('.__objectUl').toggleClass('close')
+    })
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
 $(document).ready(function () {
-	__aa(baseData)
+	// __aa(baseData)
   defaultDropdown()
-	__ab(baseData)
+	// __ab(baseData)
 	openModal()
   addDBDetails()
 	// jsonHTMLView()
@@ -1497,11 +1637,12 @@ $(document).ready(function () {
 	addSortBy()
 	clearFilter()
 	// findData()
-    renderDBList(baseData)
+  //   renderDBList(baseData)
   // createContentBox()
   bodyFunc()
   buildTabs(true)
   addTab()
+  jsonUlAction()
 
   $.getScript( "js/script.js", function( data, textStatus, jqxhr ) {
     console.log( "Load was performed." );
